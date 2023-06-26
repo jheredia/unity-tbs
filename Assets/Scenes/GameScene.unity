@@ -401,6 +401,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedUnit: {fileID: 1351489648}
+  unitsLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!4 &337541239
 Transform:
   m_ObjectHideFlags: 0
@@ -1090,6 +1093,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3802920678898849484, guid: c36195fd66deb4aba92a10d820ab32dc, type: 3}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: c36195fd66deb4aba92a10d820ab32dc, type: 3}

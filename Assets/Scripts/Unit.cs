@@ -27,16 +27,18 @@ public class Unit : MonoBehaviour
         this.targetPosition = targetPosition;
     }
 
+    /// <summary>
+    /// Calculate the distance between the taget position set in the Move function and the current position, 
+    /// if that distance is greater or equal than our stopping delta, continue moving, else stop the animation.
+    /// Rotate the character to look for the target position.
+    /// </summary>
     private void CheckMovement()
     {
-        // Calculate the distance between the taget position set in the Move function and the current position, 
-        // if that distance is greater or equal than our stopping delta, continue moving, else stop the animation.
         if (Vector3.Distance(targetPosition, transform.position) >= StoppingDelta)
         {
             Vector3 moveDirection = (targetPosition - transform.position).normalized;
             transform.position += moveDirection * movementSpeed * Time.deltaTime;
 
-            // Smoothly rotate the model to the target position
             transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
 
             unitAnimator.SetBool(IS_WALKING_PARAM, true);
@@ -47,12 +49,19 @@ public class Unit : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Change the current movement speed of the Unit
+    /// </summary>
+    /// <param name="newSpeed">New movement speed for this Unit</param>
     public void SetMovementSpeed(float newSpeed)
     {
         this.movementSpeed = newSpeed;
     }
 
-    // Increase or decrease movement speed by a percentage.
+    /// <summary>
+    /// Increase or decrease movement speed of the unit by <c>buffPercentage</c> percent.
+    /// </summary>
+    /// <param name="buffPercentage">Positive or negative to be applied on the movement speed of the unit</param>
     public void SetMovementBuff(float buffPercentage)
     {
         this.movementSpeed = this.movementSpeed * buffPercentage;

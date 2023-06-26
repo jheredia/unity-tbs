@@ -15,6 +15,10 @@ public class MouseWorld : MonoBehaviour
         transform.position = MouseWorld.GetPosition();
     }
 
+    /// <summary>
+    /// Cast a ray between the mouse and the scene floor to get the target position clicked by the user
+    /// </summary>
+    /// <returns>A vector representing the position of a click</returns>
     public static Vector3 GetPosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
