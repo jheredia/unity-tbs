@@ -47,16 +47,15 @@ public class GridSystem
         }
     }
 
-    public GridObject GetGridObject(GridPosition gridPosition)
-    {
-        if (IsValidGridPosition(gridPosition))
-            return gridObjectArray[gridPosition.x, gridPosition.z];
-        return gridObjectArray[0, 0];
+    public GridObject GetGridObject(GridPosition gridPosition) => gridObjectArray[gridPosition.x, gridPosition.z];
 
-    }
+    public bool IsValidGridPosition(GridPosition gridPosition) =>
+        gridPosition.x >= 0 &&
+        gridPosition.x < width &&
+        gridPosition.z >= 0 &&
+        gridPosition.z < height;
 
-    private bool IsValidGridPosition(GridPosition gridPosition)
-    {
-        return gridPosition.x >= 0 && gridPosition.x <= width && gridPosition.z >= 0 && gridPosition.z <= height;
-    }
+    public int GetWidth() => width;
+
+    public int GetHeight() => height;
 }
