@@ -30,8 +30,12 @@ public class UnitActionSystem : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0))
         {
+            Vector3 mousePosition = MouseWorld.GetPosition();
+            GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(mousePosition);
+            MoveAction unitMoveAction = selectedUnit.GetMoveAction();
             if (TryHandleUnitSelection()) return;
-            selectedUnit.Move(MouseWorld.GetPosition());
+            if (!unitMoveAction.IsValidActionGridPosition(mouseGridPosition)) return;
+            unitMoveAction.Move(mouseGridPosition);
         }
         HandleMovementSpeedInteractions();
     }
@@ -63,19 +67,19 @@ public class UnitActionSystem : MonoBehaviour
         //Slow player (10%)
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
-            selectedUnit.SetMovementBuff(.9f);
+            selectedUnit.GetMoveAction().SetMovementBuff(.9f);
         }
 
         // Speed up player (10%)
         if (Input.GetKeyUp(KeyCode.UpArrow))
         {
-            selectedUnit.SetMovementBuff(1.1f);
+            selectedUnit.GetMoveAction().SetMovementBuff(1.1f);
         }
 
         // Reset the speed of the player to base speed
         if (Input.GetKeyUp(KeyCode.R))
         {
-            selectedUnit.SetMovementSpeed(selectedUnit.baseMovementSpeed);
+            selectedUnit.GetMoveAction().SetMovementSpeed(selectedUnit.GetMoveAction().GetBaseMovementSpeed());
         }
     }
     /// <summary>
