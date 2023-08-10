@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UnitActionSystem : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class UnitActionSystem : MonoBehaviour
     [SerializeField] private Unit selectedUnit;
     [SerializeField] private LayerMask unitsLayerMask;
 
+    private BaseAction selectedAction;
+    private bool isBusy;
     private void Awake()
     {
         if (Instance != null)
@@ -22,22 +25,54 @@ public class UnitActionSystem : MonoBehaviour
         }
         Instance = this;
     }
+
+    private void Start()
+    {
+        SetSelectedUnit(selectedUnit);
+    }
+
     /// <summary>
     /// On click, handle unit selection or movement
     /// On key up, check for movement speed modifications
     /// </summary>
     private void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (isBusy) return;
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+        if (TryHandleUnitSelection()) return;
+
+        HandleSelectedAction();
+        GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
+
+        if (Input.GetKeyUp(KeyCode.C))
         {
-            Vector3 mousePosition = MouseWorld.GetPosition();
-            GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(mousePosition);
-            MoveAction unitMoveAction = selectedUnit.GetMoveAction();
-            if (TryHandleUnitSelection()) return;
-            if (!unitMoveAction.IsValidActionGridPosition(mouseGridPosition)) return;
-            unitMoveAction.Move(mouseGridPosition);
+            CrouchAction unitCrouchAction = selectedUnit.GetCrouchAction();
+            SetBusy();
+            unitCrouchAction.TakeAction(mouseGridPosition, ClearBusy);
         }
         HandleMovementSpeedInteractions();
+    }
+
+    private void HandleSelectedAction()
+    {
+        Vector3 mousePosition = MouseWorld.GetPosition();
+        GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(mousePosition);
+        if (!selectedAction.IsValidActionGridPosition(mouseGridPosition)) return;
+        if (Input.GetMouseButtonUp(0))
+        {
+            SetBusy();
+            selectedAction.TakeAction(mouseGridPosition, ClearBusy);
+        }
+    }
+
+    private void SetBusy()
+    {
+        isBusy = true;
+    }
+
+    private void ClearBusy()
+    {
+        isBusy = false;
     }
 
     /// <summary>
@@ -47,13 +82,16 @@ public class UnitActionSystem : MonoBehaviour
     /// <returns>True if an Unit component was hit; False otherwise</returns>
     private bool TryHandleUnitSelection()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, unitsLayerMask))
+        if (Input.GetMouseButtonDown(0))
         {
-            if (raycastHit.transform.TryGetComponent<Unit>(out Unit unit))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, unitsLayerMask))
             {
-                SetSelectedUnit(unit);
-                return true;
+                if (raycastHit.transform.TryGetComponent<Unit>(out Unit unit) && unit != selectedUnit)
+                {
+                    SetSelectedUnit(unit);
+                    return true;
+                }
             }
         }
         return false;
@@ -89,6 +127,7 @@ public class UnitActionSystem : MonoBehaviour
     private void SetSelectedUnit(Unit unit)
     {
         selectedUnit = unit;
+        SetSelectedAction(unit.GetMoveAction());
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -100,4 +139,8 @@ public class UnitActionSystem : MonoBehaviour
     {
         return selectedUnit;
     }
+
+    public void SetSelectedAction(BaseAction action) => this.selectedAction = action;
+
+    public BaseAction GetSelectedAction() => this.selectedAction;
 }

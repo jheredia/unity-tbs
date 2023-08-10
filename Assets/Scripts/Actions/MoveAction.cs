@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveAction : MonoBehaviour
+public class MoveAction : BaseAction
 {
-
     const string IS_WALKING_PARAM = "IsWalking";
 
     [SerializeField] private float movementSpeed = 4f;
@@ -15,14 +15,17 @@ public class MoveAction : MonoBehaviour
     [SerializeField] private int maxMoveDistance = 4;
 
     private Vector3 targetPosition;
-    private Unit unit;
-
     public float GetBaseMovementSpeed() => baseMovementSpeed;
 
-    void Awake()
+    protected override void Awake()
     {
-        unit = GetComponent<Unit>();
+        base.Awake();
         targetPosition = transform.position;
+    }
+
+    public override string GetActionName()
+    {
+        return "Move";
     }
 
 
@@ -35,7 +38,7 @@ public class MoveAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckMovement();
+        if (isActive) CheckMovement();
     }
 
     /// <summary>
@@ -45,26 +48,29 @@ public class MoveAction : MonoBehaviour
     /// </summary>
     private void CheckMovement()
     {
+        Vector3 moveDirection = (targetPosition - transform.position).normalized;
         if (Vector3.Distance(targetPosition, transform.position) >= StoppingDelta)
         {
-            Vector3 moveDirection = (targetPosition - transform.position).normalized;
             transform.position += moveDirection * movementSpeed * Time.deltaTime;
-
-            transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
-
             unitAnimator.SetBool(IS_WALKING_PARAM, true);
         }
         else
         {
             unitAnimator.SetBool(IS_WALKING_PARAM, false);
+            isActive = false;
+            onActionComplete();
         }
+        transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
     }
 
     // Moves the Unit from its position to the target position represented by a three dimensions vector
-    public void Move(GridPosition targetPosition)
+    public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
     {
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
+        isActive = true;
+        this.onActionComplete = onActionComplete;
     }
+
 
     /// <summary>
     /// Change the current movement speed of the Unit
@@ -84,9 +90,7 @@ public class MoveAction : MonoBehaviour
         this.movementSpeed = movementSpeed * buffPercentage;
     }
 
-    public bool IsValidActionGridPosition(GridPosition gridPosition) => GetValidActionGridPositionList().Contains(gridPosition);
-
-    public List<GridPosition> GetValidActionGridPositionList()
+    public override List<GridPosition> GetValidActionGridPositionList()
     {
         List<GridPosition> validGridPositionList = new List<GridPosition>();
         GridPosition unitGridPosition = unit.GetGridPosition();
