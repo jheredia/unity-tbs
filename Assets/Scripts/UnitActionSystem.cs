@@ -9,6 +9,8 @@ public class UnitActionSystem : MonoBehaviour
     public static UnitActionSystem Instance { get; private set; }
 
     public event EventHandler OnSelectedUnitChanged;
+    public event EventHandler OnSelectedActionChanged;
+    public event EventHandler<bool> OnBusyChanged;
 
     [SerializeField] private Unit selectedUnit;
     [SerializeField] private LayerMask unitsLayerMask;
@@ -68,18 +70,20 @@ public class UnitActionSystem : MonoBehaviour
     private void SetBusy()
     {
         isBusy = true;
+        OnBusyChanged?.Invoke(this, isBusy);
     }
 
     private void ClearBusy()
     {
         isBusy = false;
+        OnBusyChanged?.Invoke(this, isBusy);
     }
 
     /// <summary>
     /// Attempt to select an unit in the units layer mask of the scene. Cast a ray from the mouse position to the game world and in
     /// case of a hit on a component retrieve that Unit component and set it as a the selected unit for this instance.
     /// </summary>
-    /// <returns>True if an Unit component was hit; False otherwise</returns>
+    /// <returns>True if an Unit component was hit and it's not the same one; False otherwise</returns>
     private bool TryHandleUnitSelection()
     {
         if (Input.GetMouseButtonDown(0))
@@ -140,7 +144,12 @@ public class UnitActionSystem : MonoBehaviour
         return selectedUnit;
     }
 
-    public void SetSelectedAction(BaseAction action) => this.selectedAction = action;
-
+    public void SetSelectedAction(BaseAction action)
+    {
+        this.selectedAction = action;
+        OnSelectedActionChanged?.Invoke(this, EventArgs.Empty);
+    }
     public BaseAction GetSelectedAction() => this.selectedAction;
+
+    public bool GetIsBusy() => this.isBusy;
 }
