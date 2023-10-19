@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SpinAction : BaseAction
 {
-
+    private const int actionPointsCost = 3;
     private float totalSpinAmount;
 
     void Update()
@@ -38,5 +38,10 @@ public class SpinAction : BaseAction
     {
         GridPosition unitGridPosition = unit.GetGridPosition();
         return new List<GridPosition> { unitGridPosition };
+    }
+
+    public override int GetActionPointsCost()
+    {
+        return actionPointsCost;
     }
 }

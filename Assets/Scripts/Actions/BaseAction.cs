@@ -9,6 +9,8 @@ public abstract class BaseAction : MonoBehaviour
     protected Unit unit;
     protected bool isActive;
 
+    const int actionPointsCost = 1;
+
     protected virtual void Awake()
     {
         unit = GetComponent<Unit>();
@@ -33,5 +35,12 @@ public abstract class BaseAction : MonoBehaviour
     public virtual bool IsValidActionGridPosition(GridPosition gridPosition) => GetValidActionGridPositionList().Contains(gridPosition);
 
     public abstract List<GridPosition> GetValidActionGridPositionList();
+
+    /// <summary>
+    ///     Returns the action points cost for a base action, should be overriden by each specific action
+    ///     indicating their corresponding cost
+    /// </summary>
+    /// <returns>The action points cost for this action</returns>
+    public virtual int GetActionPointsCost() => actionPointsCost;
 
 }

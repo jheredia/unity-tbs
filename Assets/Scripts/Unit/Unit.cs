@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
@@ -10,6 +11,10 @@ public class Unit : MonoBehaviour
 
     private CrouchAction crouchAction;
     private BaseAction[] baseActionArray;
+    private const int STARTING_ACTION_POINTS = 4;
+    private int actionPoints = STARTING_ACTION_POINTS;
+
+    public static event EventHandler OnAnyActionPointsChanged;
     private void Awake()
     {
         moveAction = GetComponent<MoveAction>();
@@ -22,6 +27,7 @@ public class Unit : MonoBehaviour
     {
         gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(gridPosition, this);
+        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
     }
 
 
@@ -45,4 +51,38 @@ public class Unit : MonoBehaviour
     public GridPosition GetGridPosition() => gridPosition;
 
     public BaseAction[] GetUnitActions() => baseActionArray;
+
+    public int GetActionPoints() => actionPoints;
+
+    public bool TrySpendActionPointsOnAction(BaseAction action)
+    {
+        if (CanSpendActionPoints(action))
+        {
+            SpendActionPoints(action.GetActionPointsCost());
+            return true;
+        }
+        return false;
+    }
+
+    public bool CanSpendActionPoints(BaseAction action) => this.GetActionPoints() >= action.GetActionPointsCost();
+
+    private void SpendActionPoints(int amount)
+    {
+        if (GetActionPoints() - amount >= 0)
+        {
+            actionPoints -= amount;
+            OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    private void TurnSystem_OnTurnChanged(object sender, EventArgs empty)
+    {
+        ResetActionPoints();
+    }
+
+    private void ResetActionPoints()
+    {
+        actionPoints = STARTING_ACTION_POINTS;
+        OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
+    }
 }

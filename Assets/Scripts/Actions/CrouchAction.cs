@@ -14,6 +14,8 @@ public class CrouchAction : BaseAction
     const string IS_STANDING_PARAM = "IsStanding";
     const string IS_CROUCHED_PARAM = "IsCrouched";
 
+    const int actionPointsCost = 2;
+
     void Update()
     {
         if (!isActive) return;
@@ -74,5 +76,10 @@ public class CrouchAction : BaseAction
     {
         GridPosition unitGridPosition = unit.GetGridPosition();
         return new List<GridPosition> { unitGridPosition };
+    }
+
+    public override int GetActionPointsCost()
+    {
+        return actionPointsCost;
     }
 }
