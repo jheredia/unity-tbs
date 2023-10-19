@@ -13,6 +13,7 @@ public class MoveAction : BaseAction
     [SerializeField] private Animator unitAnimator;
     [SerializeField] readonly float rotateSpeed = 10f;
     [SerializeField] private int maxMoveDistance = 4;
+    const int actionPointsCost = 1;
 
     private Vector3 targetPosition;
     public float GetBaseMovementSpeed() => baseMovementSpeed;
@@ -110,4 +111,8 @@ public class MoveAction : BaseAction
         return validGridPositionList;
     }
 
+    public override int GetActionPointsCost()
+    {
+        return actionPointsCost;
+    }
 }
