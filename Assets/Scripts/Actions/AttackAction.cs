@@ -20,7 +20,9 @@ public class AttackAction : BaseAction
     private int maxAttackRange = 4;
     private Unit targetUnit;
     private bool canShootBullet;
-    float rotateSpeed = 10f;
+    private float rotateSpeed = 10f;
+
+    public event EventHandler OnShoot;
 
     public override string GetActionName()
     {
@@ -126,6 +128,7 @@ public class AttackAction : BaseAction
 
     private void Shoot()
     {
+        OnShoot?.Invoke(this, EventArgs.Empty);
         targetUnit.Damage();
     }
 }

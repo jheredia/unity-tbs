@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class MoveAction : BaseAction
 {
-    const string IS_WALKING_PARAM = "IsWalking";
+    public event EventHandler OnStartMoving;
+    public event EventHandler OnStopMoving;
 
     [SerializeField] private float movementSpeed = 4f;
     [SerializeField] private float baseMovementSpeed = 4f;
     [SerializeField] readonly float StoppingDelta = .1f;
-    [SerializeField] private Animator unitAnimator;
     [SerializeField] readonly float rotateSpeed = 10f;
     [SerializeField] private int maxMoveDistance = 3;
     const int actionPointsCost = 1;
@@ -53,11 +53,10 @@ public class MoveAction : BaseAction
         if (Vector3.Distance(targetPosition, transform.position) >= StoppingDelta)
         {
             transform.position += moveDirection * movementSpeed * Time.deltaTime;
-            unitAnimator.SetBool(IS_WALKING_PARAM, true);
         }
         else
         {
-            unitAnimator.SetBool(IS_WALKING_PARAM, false);
+            OnStopMoving?.Invoke(this, EventArgs.Empty);
             ActionComplete();
         }
         transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
@@ -66,6 +65,7 @@ public class MoveAction : BaseAction
     // Moves the Unit from its position to the target position represented by a three dimensions vector
     public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
     {
+        OnStartMoving?.Invoke(this, EventArgs.Empty);
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
         ActionStart(onActionComplete);
     }
