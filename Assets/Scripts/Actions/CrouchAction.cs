@@ -39,10 +39,9 @@ public class CrouchAction : BaseAction
         totalCrouchAmount -= crouchAmount;
         if (totalCrouchAmount <= 0)
         {
-            isActive = false;
             unitAnimator.SetBool(IS_CROUCHED_PARAM, false);
             unitAnimator.SetBool(IS_STANDING_PARAM, false);
-            onActionComplete();
+            ActionComplete();
         }
     }
 
@@ -54,17 +53,15 @@ public class CrouchAction : BaseAction
         totalCrouchAmount += crouchAddAmount;
         if (totalCrouchAmount >= crouchDelta)
         {
-            isActive = false;
             unitAnimator.SetBool(IS_CROUCHED_PARAM, true);
             unitAnimator.SetBool(IS_CROUCHING_PARAM, false);
-            onActionComplete();
+            ActionComplete();
         }
     }
 
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
-        this.onActionComplete = onActionComplete;
-        isActive = true;
+        ActionStart(onActionComplete);
     }
 
     public override string GetActionName()

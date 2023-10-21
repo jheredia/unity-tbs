@@ -12,7 +12,7 @@ public class MoveAction : BaseAction
     [SerializeField] readonly float StoppingDelta = .1f;
     [SerializeField] private Animator unitAnimator;
     [SerializeField] readonly float rotateSpeed = 10f;
-    [SerializeField] private int maxMoveDistance = 4;
+    [SerializeField] private int maxMoveDistance = 3;
     const int actionPointsCost = 1;
 
     private Vector3 targetPosition;
@@ -58,8 +58,7 @@ public class MoveAction : BaseAction
         else
         {
             unitAnimator.SetBool(IS_WALKING_PARAM, false);
-            isActive = false;
-            onActionComplete();
+            ActionComplete();
         }
         transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
     }
@@ -68,8 +67,7 @@ public class MoveAction : BaseAction
     public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
     {
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
-        isActive = true;
-        this.onActionComplete = onActionComplete;
+        ActionStart(onActionComplete);
     }
 
 

@@ -7,9 +7,10 @@ using UnityEngine.UI;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    [SerializeField] private Button button;
+    [SerializeField] private Button endTurnButton;
 
     [SerializeField] private TextMeshProUGUI turnNumberText;
+    [SerializeField] private TextMeshProUGUI enemyTurnVisual;
 
 
     // Start is called before the first frame update
@@ -17,11 +18,11 @@ public class NewBehaviourScript : MonoBehaviour
     {
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
 
-        button.onClick.AddListener(() =>
+        endTurnButton.onClick.AddListener(() =>
         {
             TurnSystem.Instance.NextTurn();
         });
-        UpdateTurnNumberText();
+        UpdateTurnVisuals();
     }
 
     // Update is called once per frame
@@ -33,11 +34,29 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void TurnSystem_OnTurnChanged(object sender, EventArgs empty)
     {
-        UpdateTurnNumberText();
+        UpdateTurnVisuals();
     }
 
     private void UpdateTurnNumberText()
     {
         turnNumberText.text = $"Turn: {TurnSystem.Instance.GetTurnNumber()}";
     }
+
+    private void UpdateEnemyTurnVisual()
+    {
+        enemyTurnVisual.text = $"{(TurnSystem.Instance.IsPlayerTurn() ? "Player" : "Enemy")} Turn";
+    }
+
+    private void UpdateEndTurnButtonVisibility()
+    {
+        endTurnButton.gameObject.SetActive(TurnSystem.Instance.IsPlayerTurn());
+    }
+
+    private void UpdateTurnVisuals()
+    {
+        UpdateTurnNumberText();
+        UpdateEnemyTurnVisual();
+        UpdateEndTurnButtonVisibility();
+    }
 }
+

@@ -21,10 +21,7 @@ public class GridObject
         unitList.Add(unit);
     }
 
-    public List<Unit> GetUnitList()
-    {
-        return this.unitList;
-    }
+    public List<Unit> GetUnitList() => unitList;
 
     public void RemoveUnit(Unit unit)
     {
@@ -38,9 +35,18 @@ public class GridObject
         {
             unitString += $"{unit} \n";
         }
-        return unitString += $"- {gridPosition.ToString()}";
+        return unitString += $"- {gridPosition}";
 
     }
 
-    public bool HasAnyUnit() => this.GetUnitList().Count > 0;
+    public bool HasAnyUnit() => GetUnitList().Count > 0;
+
+    public Unit GetUnit()
+    {
+        if (HasAnyUnit())
+        {
+            return GetUnitList()[0];
+        }
+        return null;
+    }
 }

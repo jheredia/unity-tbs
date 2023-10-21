@@ -15,6 +15,8 @@ public class Unit : MonoBehaviour
     private int actionPoints = STARTING_ACTION_POINTS;
 
     public static event EventHandler OnAnyActionPointsChanged;
+
+    [SerializeField] private bool isEnemy;
     private void Awake()
     {
         moveAction = GetComponent<MoveAction>();
@@ -50,6 +52,8 @@ public class Unit : MonoBehaviour
 
     public GridPosition GetGridPosition() => gridPosition;
 
+    public Vector3 GetWorldPosition() => transform.position;
+
     public BaseAction[] GetUnitActions() => baseActionArray;
 
     public int GetActionPoints() => actionPoints;
@@ -82,7 +86,22 @@ public class Unit : MonoBehaviour
 
     private void ResetActionPoints()
     {
-        actionPoints = STARTING_ACTION_POINTS;
+        if (CanResetActionPoints())
+            actionPoints = STARTING_ACTION_POINTS;
         OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    private bool CanResetActionPoints()
+    {
+        bool isPlayerTurn = TurnSystem.Instance.IsPlayerTurn();
+        if ((IsEnemy() && !isPlayerTurn) || (!IsEnemy() && isPlayerTurn)) return true;
+        return false;
+    }
+
+    public bool IsEnemy() => isEnemy;
+
+    public void Damage()
+    {
+        Debug.Log(transform + " hit");
     }
 }
