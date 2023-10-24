@@ -139,6 +139,6 @@ public class AttackAction : BaseAction
             targetUnit = targetUnit,
             shootingUnit = unit,
         });
-        targetUnit.Damage();
+        targetUnit.Damage(UnityEngine.Random.Range(30, 51));
     }
 }

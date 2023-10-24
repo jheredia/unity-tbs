@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8691543118531426620}
   - component: {fileID: 6529012804902868592}
   - component: {fileID: 2782708571653772254}
+  - component: {fileID: 5215956003648456695}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -144,6 +145,18 @@ MonoBehaviour:
   laserProjectilePrefab: {fileID: 7081208189941112127, guid: a8a5294692dcd471da9f6ef101f02407,
     type: 3}
   shootPointTransform: {fileID: 3289599036206892270}
+--- !u!114 &5215956003648456695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3144902361055536443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 770bd6f8c95eb466abec99cb2ca2fe2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3854700103265592961
 GameObject:
   m_ObjectHideFlags: 0
