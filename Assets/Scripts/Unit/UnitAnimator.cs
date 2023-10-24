@@ -9,6 +9,10 @@ public class UnitAnimator : MonoBehaviour
     const string IS_WALKING_PARAM = "IsWalking";
 
     [SerializeField] private Animator unitAnimator;
+    [SerializeField] private Transform bulletProjectilePrefab;
+    [SerializeField] private Transform laserProjectilePrefab;
+    [SerializeField] private Transform shootPointTransform;
+
 
     private void Awake()
     {
@@ -45,8 +49,16 @@ public class UnitAnimator : MonoBehaviour
         unitAnimator.SetBool(IS_WALKING_PARAM, false);
     }
 
-    private void AttackAction_OnShoot(object sender, EventArgs e)
+    private void AttackAction_OnShoot(object sender, AttackAction.OnShootEventArgs e)
     {
         unitAnimator.SetTrigger("Shoot");
+        Transform bulletProjectileTransform = Instantiate(bulletProjectilePrefab, shootPointTransform.position, Quaternion.identity);
+        if (bulletProjectileTransform.TryGetComponent(out BulletProjectile bulletProjectile))
+        {
+            Vector3 targetUnitShootAtPosition = e.targetUnit.GetWorldPosition();
+
+            targetUnitShootAtPosition.y = shootPointTransform.position.y;
+            bulletProjectile.Setup(targetUnitShootAtPosition);
+        }
     }
 }

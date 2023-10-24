@@ -17,12 +17,18 @@ public class AttackAction : BaseAction
     private State state;
     private float stateTimer;
 
-    private int maxAttackRange = 4;
+    private int maxAttackRange = 7;
     private Unit targetUnit;
     private bool canShootBullet;
     private float rotateSpeed = 10f;
 
-    public event EventHandler OnShoot;
+    public event EventHandler<OnShootEventArgs> OnShoot;
+
+    public class OnShootEventArgs : EventArgs
+    {
+        public Unit targetUnit;
+        public Unit shootingUnit;
+    }
 
     public override string GetActionName()
     {
@@ -128,7 +134,11 @@ public class AttackAction : BaseAction
 
     private void Shoot()
     {
-        OnShoot?.Invoke(this, EventArgs.Empty);
+        OnShoot?.Invoke(this, new OnShootEventArgs
+        {
+            targetUnit = targetUnit,
+            shootingUnit = unit,
+        });
         targetUnit.Damage();
     }
 }
