@@ -12,8 +12,8 @@ public class Unit : MonoBehaviour
 
     private CrouchAction crouchAction;
     private BaseAction[] baseActionArray;
-    private const int STARTING_ACTION_POINTS = 4;
-    private int actionPoints = STARTING_ACTION_POINTS;
+    private int actionPoints = 4;
+    private int maxActionPoints;
 
     public static event EventHandler OnAnyActionPointsChanged;
 
@@ -25,6 +25,7 @@ public class Unit : MonoBehaviour
         crouchAction = GetComponent<CrouchAction>();
         baseActionArray = GetComponents<BaseAction>();
         healthSystem = GetComponent<HealthSystem>();
+        maxActionPoints = actionPoints;
     }
 
     private void Start()
@@ -90,7 +91,7 @@ public class Unit : MonoBehaviour
     private void ResetActionPoints()
     {
         if (CanResetActionPoints())
-            actionPoints = STARTING_ACTION_POINTS;
+            actionPoints = maxActionPoints;
         OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -118,6 +119,11 @@ public class Unit : MonoBehaviour
         Destroy(gameObject);
         LevelGrid.Instance.RemoveUnitAtGridPosition(GetGridPosition(), this);
 
+    }
+
+    public float GetActionPointsNormalized()
+    {
+        return (float)actionPoints / maxActionPoints;
     }
 
 }

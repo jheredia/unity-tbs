@@ -8,10 +8,16 @@ public class HealthSystem : MonoBehaviour
 {
 
     [SerializeField] private int health = 100;
-    [SerializeField] private int maxHealth = 150;
+    private int maxHealth;
 
     public event EventHandler OnDeath;
+    public event EventHandler OnDamage;
+    public event EventHandler OnHeal;
 
+    private void Awake()
+    {
+        maxHealth = health;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -29,14 +35,15 @@ public class HealthSystem : MonoBehaviour
     {
         health -= damageAmount;
         if (health < 0) health = 0;
+        OnDamage?.Invoke(this, EventArgs.Empty);
         if (health == 0) Die();
-        Debug.Log(health);
     }
 
     public void Heal(int healingAmount)
     {
         health += healingAmount;
         if (health > maxHealth) health = maxHealth;
+        OnHeal?.Invoke(this, EventArgs.Empty);
     }
 
 
@@ -44,4 +51,13 @@ public class HealthSystem : MonoBehaviour
     {
         OnDeath?.Invoke(this, EventArgs.Empty);
     }
+
+    public float GetHealthNormalized()
+    {
+        return (float)health / maxHealth;
+    }
+
+    public int GetHealth() => health;
+
+    public int GetMaxHealth() => maxHealth;
 }
