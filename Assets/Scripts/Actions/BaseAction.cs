@@ -16,17 +16,9 @@ public abstract class BaseAction : MonoBehaviour
         unit = GetComponent<Unit>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    public static event EventHandler OnAnyActionStarted;
+    public static event EventHandler OnAnyActionCompleted;
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public abstract string GetActionName();
 
@@ -47,11 +39,15 @@ public abstract class BaseAction : MonoBehaviour
     {
         this.onActionComplete = onActionComplete;
         isActive = true;
+        OnAnyActionStarted?.Invoke(this, EventArgs.Empty);
     }
 
     protected virtual void ActionComplete()
     {
         isActive = false;
         onActionComplete();
+        OnAnyActionCompleted?.Invoke(this, EventArgs.Empty);
     }
+
+    public Unit GetUnit() => unit;
 }

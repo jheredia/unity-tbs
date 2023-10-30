@@ -23,7 +23,7 @@ public class UnitAnimator : MonoBehaviour
         }
         if (TryGetComponent(out AttackAction attackAction))
         {
-            attackAction.OnShoot += AttackAction_OnShoot;
+            attackAction.OnAttack += AttackAction_OnAttack;
         }
     }
 
@@ -49,7 +49,7 @@ public class UnitAnimator : MonoBehaviour
         unitAnimator.SetBool(IS_WALKING_PARAM, false);
     }
 
-    private void AttackAction_OnShoot(object sender, AttackAction.OnShootEventArgs e)
+    private void AttackAction_OnAttack(object sender, AttackAction.OnAttackEventArgs e)
     {
         unitAnimator.SetTrigger("Shoot");
         Transform bulletProjectileTransform = Instantiate(bulletProjectilePrefab, shootPointTransform.position, Quaternion.identity);

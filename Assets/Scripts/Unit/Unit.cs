@@ -18,6 +18,7 @@ public class Unit : MonoBehaviour
     public static event EventHandler OnAnyActionPointsChanged;
 
     [SerializeField] private bool isEnemy;
+    [SerializeField] private Transform actionCameraViewpoint;
     private void Awake()
     {
         moveAction = GetComponent<MoveAction>();
@@ -126,4 +127,5 @@ public class Unit : MonoBehaviour
         return (float)actionPoints / maxActionPoints;
     }
 
+    public Transform GetActionCameraViewpoint() => actionCameraViewpoint;
 }

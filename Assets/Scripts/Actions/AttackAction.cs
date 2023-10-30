@@ -22,12 +22,13 @@ public class AttackAction : BaseAction
     private bool canShootBullet;
     private float rotateSpeed = 10f;
 
-    public event EventHandler<OnShootEventArgs> OnShoot;
+    public event EventHandler<OnAttackEventArgs> OnAttack;
 
-    public class OnShootEventArgs : EventArgs
+    public class OnAttackEventArgs : EventArgs
     {
         public Unit targetUnit;
-        public Unit shootingUnit;
+        public Unit attackingUnit;
+        public int damageDealt;
     }
 
     public override string GetActionName()
@@ -61,13 +62,13 @@ public class AttackAction : BaseAction
 
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
-        ActionStart(onActionComplete);
         targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
 
         state = State.Aiming;
         float aimingStateTime = 1f;
         stateTimer = aimingStateTime;
         canShootBullet = true;
+        ActionStart(onActionComplete);
     }
 
     // Start is called before the first frame update
@@ -134,11 +135,15 @@ public class AttackAction : BaseAction
 
     private void Shoot()
     {
-        OnShoot?.Invoke(this, new OnShootEventArgs
+        int damageDealt = UnityEngine.Random.Range(30, 51);
+        OnAttack?.Invoke(this, new OnAttackEventArgs
         {
             targetUnit = targetUnit,
-            shootingUnit = unit,
+            attackingUnit = unit,
+            damageDealt = damageDealt,
         });
-        targetUnit.Damage(UnityEngine.Random.Range(30, 51));
+        targetUnit.Damage(damageDealt);
     }
+
+    public Unit GetTargetUnit() => targetUnit;
 }

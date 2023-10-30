@@ -65,8 +65,8 @@ public class MoveAction : BaseAction
     // Moves the Unit from its position to the target position represented by a three dimensions vector
     public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
     {
-        OnStartMoving?.Invoke(this, EventArgs.Empty);
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
+        OnStartMoving?.Invoke(this, EventArgs.Empty);
         ActionStart(onActionComplete);
     }
 
