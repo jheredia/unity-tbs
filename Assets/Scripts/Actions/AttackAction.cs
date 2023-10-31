@@ -146,4 +146,6 @@ public class AttackAction : BaseAction
     }
 
     public Unit GetTargetUnit() => targetUnit;
+
+    public int GetMaxAttackRange() => maxAttackRange;
 }

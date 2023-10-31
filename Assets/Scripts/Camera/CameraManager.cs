@@ -34,18 +34,18 @@ public class CameraManager : MonoBehaviour
             case AttackAction attackAction:
                 Unit attackingUnit = attackAction.GetUnit();
                 Unit targetUnit = attackAction.GetTargetUnit();
-                // Transform actionCameraViewPointTransform = attackingUnit.GetActionCameraViewpoint();
                 Vector3 cameraCharacterHeight = Vector3.up * 1.7f;
                 Vector3 attackDirection = (targetUnit.GetWorldPosition() - attackingUnit.GetWorldPosition()).normalized;
 
                 float shoulderOffsetAmount = 0.5f;
                 Vector3 shoulderOffset = Quaternion.Euler(0, 90, 0) * attackDirection * shoulderOffsetAmount;
 
-                Vector3 actionCameraPosition = attackingUnit.GetWorldPosition() + cameraCharacterHeight + shoulderOffset + (attackDirection * -1);
+                Vector3 actionCameraPosition =
+                    attackingUnit.GetWorldPosition() +
+                    cameraCharacterHeight +
+                    shoulderOffset +
+                    (attackDirection * -1);
 
-                // actionCameraGameObject.transform.position = actionCameraViewPointTransform.right + actionCameraViewPointTransform.up + actionCameraViewPointTransform.forward;
-
-                // Debug.Log(actionCameraViewPointTransform.right + actionCameraViewPointTransform.up + actionCameraViewPointTransform.forward);
                 actionCameraGameObject.transform.position = actionCameraPosition;
                 actionCameraGameObject.transform.LookAt(targetUnit.GetWorldPosition() + cameraCharacterHeight);
                 overlayUICanvas.SetActive(false);

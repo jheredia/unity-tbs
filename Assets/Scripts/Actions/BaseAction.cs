@@ -3,11 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/**
+Should be refactored so that each action has its own range, color and bool to check if it should be shown
+*/
 public abstract class BaseAction : MonoBehaviour
 {
     protected Action onActionComplete;
     protected Unit unit;
     protected bool isActive;
+
+    // [SerializeField, Min(0)] private int actionRange = 4;
+    // [SerializeField] private Color color = Color.white;
+    // [SerializeField] private bool showRange;
+
+    [SerializeField] GridSystemVisual.GridVisualType gridVisualType;
+    [SerializeField] GridSystemVisual.GridVisualType rangeGridVisualType;
 
     const int actionPointsCost = 1;
 
@@ -50,4 +61,5 @@ public abstract class BaseAction : MonoBehaviour
     }
 
     public Unit GetUnit() => unit;
+
 }

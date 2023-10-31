@@ -4711,6 +4711,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ed578d22b73dc4298289e160c2af96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridVisualTypeMaterialList:
+  - gridVisualType: 0
+    material: {fileID: 2100000, guid: 6ec256ccd73f34c909094812ba44cd50, type: 2}
+  - gridVisualType: 2
+    material: {fileID: 2100000, guid: 56c06f8dff8fd4ef8aff781fb4c05969, type: 2}
+  - gridVisualType: 1
+    material: {fileID: 2100000, guid: 2fe852ffdbd1d4efd86c7dfda9b96d24, type: 2}
+  - gridVisualType: 3
+    material: {fileID: 2100000, guid: 0f0b2d49b93f742cf94aedb8ddcd31e6, type: 2}
+  - gridVisualType: 4
+    material: {fileID: 2100000, guid: 0586c2f74732748cf80f143195f63b86, type: 2}
+  - gridVisualType: 5
+    material: {fileID: 2100000, guid: 8280e91ad7808d0458e70250ec18f667, type: 2}
+  - gridVisualType: 6
+    material: {fileID: 2100000, guid: 3656676ff73f34aa1a19c128271ddc2b, type: 2}
   gridSystemVisualSinglePrefab: {fileID: 2628395732124575364, guid: d6ff672a0c2fd1b40a3fb85187e5d9c7,
     type: 3}
 --- !u!4 &1967029439
@@ -4961,6 +4976,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Unit
+      objectReference: {fileID: 0}
+    - target: {fileID: 6379053461086071543, guid: c36195fd66deb4aba92a10d820ab32dc,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 21.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6379053461086071543, guid: c36195fd66deb4aba92a10d820ab32dc,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6529012804902868592, guid: c36195fd66deb4aba92a10d820ab32dc,
+        type: 3}
+      propertyPath: actionRange
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8691543118531426620, guid: c36195fd66deb4aba92a10d820ab32dc,
         type: 3}
