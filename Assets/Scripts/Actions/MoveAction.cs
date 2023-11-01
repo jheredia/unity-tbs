@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class MoveAction : BaseAction
 {
-    const string IS_WALKING_PARAM = "IsWalking";
+    public event EventHandler OnStartMoving;
+    public event EventHandler OnStopMoving;
 
     [SerializeField] private float movementSpeed = 4f;
     [SerializeField] private float baseMovementSpeed = 4f;
     [SerializeField] readonly float StoppingDelta = .1f;
-    [SerializeField] private Animator unitAnimator;
     [SerializeField] readonly float rotateSpeed = 10f;
-    [SerializeField] private int maxMoveDistance = 4;
+    [SerializeField] private int maxMoveDistance = 3;
     const int actionPointsCost = 1;
 
     private Vector3 targetPosition;
@@ -33,7 +33,6 @@ public class MoveAction : BaseAction
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -53,13 +52,11 @@ public class MoveAction : BaseAction
         if (Vector3.Distance(targetPosition, transform.position) >= StoppingDelta)
         {
             transform.position += moveDirection * movementSpeed * Time.deltaTime;
-            unitAnimator.SetBool(IS_WALKING_PARAM, true);
         }
         else
         {
-            unitAnimator.SetBool(IS_WALKING_PARAM, false);
-            isActive = false;
-            onActionComplete();
+            OnStopMoving?.Invoke(this, EventArgs.Empty);
+            ActionComplete();
         }
         transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
     }
@@ -68,8 +65,8 @@ public class MoveAction : BaseAction
     public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
     {
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
-        isActive = true;
-        this.onActionComplete = onActionComplete;
+        OnStartMoving?.Invoke(this, EventArgs.Empty);
+        ActionStart(onActionComplete);
     }
 
 
@@ -114,5 +111,12 @@ public class MoveAction : BaseAction
     public override int GetActionPointsCost()
     {
         return actionPointsCost;
+    }
+
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        int targetCountAtGridPosition = unit.GetAttackAction().GetTargetCountAtPosition(gridPosition);
+        Debug.Log($"Move value {targetCountAtGridPosition * 10}");
+        return new EnemyAIAction(gridPosition, targetCountAtGridPosition * 10);
     }
 }

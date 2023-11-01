@@ -14,7 +14,7 @@ public class Testing : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T)) GridSystemVisual.Instance.ShowGridPositionList(unit.GetMoveAction().GetValidActionGridPositionList());
+        if (Input.GetKeyDown(KeyCode.T)) GridSystemVisual.Instance.ShowGridPositionList(unit.GetMoveAction().GetValidActionGridPositionList(), GridSystemVisual.GridVisualType.Blue);
         if (Input.GetKeyDown(KeyCode.H)) GridSystemVisual.Instance.HideAllGridPositions();
         //Debug.Log(gridSystem.GetGridPosition(MouseWorld.GetPosition()));
     }

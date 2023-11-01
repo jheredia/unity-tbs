@@ -40,4 +40,9 @@ public class UnitSelectedVisual : MonoBehaviour
     {
         meshRenderer.enabled = UnitActionSystem.Instance.GetSelectedUnit() == unit;
     }
+
+    private void OnDestroy()
+    {
+        UnitActionSystem.Instance.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged;
+    }
 }
