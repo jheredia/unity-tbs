@@ -19,8 +19,7 @@ public abstract class BaseAction : MonoBehaviour
 
     [SerializeField] GridSystemVisual.GridVisualType gridVisualType;
     [SerializeField] GridSystemVisual.GridVisualType rangeGridVisualType;
-
-    const int actionPointsCost = 1;
+    [SerializeField] private int actionPointsCost = 1;
 
     protected virtual void Awake()
     {

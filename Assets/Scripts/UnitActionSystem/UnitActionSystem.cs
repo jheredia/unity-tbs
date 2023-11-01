@@ -23,7 +23,7 @@ public class UnitActionSystem : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError($"Multiple instances of UnitActionSystem present {transform} - {Instance}");
+            Debug.LogError($"Multiple instances of {GetType().Name} present {transform} - {Instance}");
             Destroy(gameObject);
             return;
         }

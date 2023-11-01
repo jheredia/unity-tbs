@@ -24,11 +24,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 31754961624646668}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25, y: -20, z: 25}
+  m_LocalPosition: {x: -0.5, y: 1.7, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3149702919529575279}
+  m_Father: {fileID: 3144902361055536421}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &420154258698574094
@@ -731,7 +731,6 @@ GameObject:
   - component: {fileID: 6620876567883648889}
   - component: {fileID: 8153697069655366984}
   - component: {fileID: 7231054622388251583}
-  - component: {fileID: 8691543118531426620}
   - component: {fileID: 6529012804902868592}
   - component: {fileID: 2782708571653772254}
   - component: {fileID: 5215956003648456695}
@@ -758,6 +757,7 @@ Transform:
   - {fileID: 3149342315483495609}
   - {fileID: 8395969232960759049}
   - {fileID: 2498510199331033986}
+  - {fileID: 6379053461086071543}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -808,9 +808,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ef75dd7d7e1fe4dbf0e1281d00bb3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionRange: 0
-  color: {r: 1, g: 1, b: 1, a: 1}
-  showRange: 0
   gridVisualType: 2
   rangeGridVisualType: 2
   movementSpeed: 4
@@ -828,29 +825,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a71fb6cf0b339e44f892c55a2f359680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionRange: 0
-  color: {r: 1, g: 1, b: 1, a: 1}
-  showRange: 0
   gridVisualType: 0
   rangeGridVisualType: 0
---- !u!114 &8691543118531426620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3144902361055536443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7fe7575b9366da488e6fd76bb87e01a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionRange: 0
-  color: {r: 1, g: 1, b: 1, a: 1}
-  showRange: 0
-  gridVisualType: 3
-  rangeGridVisualType: 0
-  unitAnimator: {fileID: 3094181670317464993}
 --- !u!114 &6529012804902868592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -863,9 +839,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bdca662f6d1d43299867e23e22450d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionRange: 0
-  color: {r: 1, g: 1, b: 1, a: 1}
-  showRange: 0
   gridVisualType: 3
   rangeGridVisualType: 4
 --- !u!114 &2782708571653772254
@@ -1947,10 +1920,6 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 4800564899037334, guid: 2f3e27eecb190e44a9af50723c394274,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6379053461086071543}
     - targetCorrespondingSourceObject: {fileID: 4170833147357194, guid: 2f3e27eecb190e44a9af50723c394274,
         type: 3}
       insertIndex: -1
@@ -1978,12 +1947,6 @@ Transform:
 --- !u!4 &3149516787911010467 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4966341056781146, guid: 2f3e27eecb190e44a9af50723c394274,
-    type: 3}
-  m_PrefabInstance: {fileID: 3144902359362401273}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3149702919529575279 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4800564899037334, guid: 2f3e27eecb190e44a9af50723c394274,
     type: 3}
   m_PrefabInstance: {fileID: 3144902359362401273}
   m_PrefabAsset: {fileID: 0}

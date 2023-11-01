@@ -16,6 +16,8 @@ public class Unit : MonoBehaviour
     private int maxActionPoints;
 
     public static event EventHandler OnAnyActionPointsChanged;
+    public static event EventHandler OnAnyUnitSpawned;
+    public static event EventHandler OnAnyUnitDied;
 
     [SerializeField] private bool isEnemy;
     [SerializeField] private Transform actionCameraViewpoint;
@@ -35,6 +37,7 @@ public class Unit : MonoBehaviour
         LevelGrid.Instance.AddUnitAtGridPosition(gridPosition, this);
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
         healthSystem.OnDeath += HealthSystem_OnDeath;
+        OnAnyUnitSpawned?.Invoke(this, EventArgs.Empty);
     }
 
 
@@ -120,7 +123,7 @@ public class Unit : MonoBehaviour
     {
         Destroy(gameObject);
         LevelGrid.Instance.RemoveUnitAtGridPosition(GetGridPosition(), this);
-
+        OnAnyUnitDied?.Invoke(this, EventArgs.Empty);
     }
 
     public float GetActionPointsNormalized()

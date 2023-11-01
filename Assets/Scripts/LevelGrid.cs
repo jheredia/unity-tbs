@@ -17,7 +17,7 @@ public class LevelGrid : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError($"Multiple instances of LevelGrid present {transform} - {Instance}");
+            Debug.LogError($"Multiple instances of {GetType().Name} present {transform} - {Instance}");
             Destroy(gameObject);
             return;
         }

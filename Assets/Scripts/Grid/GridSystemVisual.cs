@@ -59,7 +59,8 @@ public class GridSystemVisual : MonoBehaviour
         }
         UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged;
         levelGrid.OnAnyUnitMovedGridPosition += LevelGrid_OnAnyUnitMovedGridPosition;
-
+        Unit.OnAnyUnitDied += Unit_OnAnyUnitDied;
+        Unit.OnAnyUnitSpawned += Unit_OnAnyUnitSpawned;
         UpdateGridVisual();
     }
 
@@ -144,6 +145,15 @@ public class GridSystemVisual : MonoBehaviour
         UpdateGridVisual();
     }
 
+    private void Unit_OnAnyUnitDied(object sender, EventArgs e)
+    {
+        UpdateGridVisual();
+    }
+
+    private void Unit_OnAnyUnitSpawned(object sender, EventArgs e)
+    {
+        UpdateGridVisual();
+    }
     private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType)
     {
         foreach (GridVisualTypeMaterial gridVisualTypeMaterial in gridVisualTypeMaterialList)
