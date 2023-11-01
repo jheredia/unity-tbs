@@ -11,8 +11,10 @@ public class Unit : MonoBehaviour
     private SpinAction spinAction;
 
     private CrouchAction crouchAction;
+
+    private AttackAction attackAction;
     private BaseAction[] baseActionArray;
-    private int actionPoints = 4;
+    private int actionPoints = 3;
     private int maxActionPoints;
 
     public static event EventHandler OnAnyActionPointsChanged;
@@ -26,6 +28,7 @@ public class Unit : MonoBehaviour
         moveAction = GetComponent<MoveAction>();
         spinAction = GetComponent<SpinAction>();
         crouchAction = GetComponent<CrouchAction>();
+        attackAction = GetComponent<AttackAction>();
         baseActionArray = GetComponents<BaseAction>();
         healthSystem = GetComponent<HealthSystem>();
         maxActionPoints = actionPoints;
@@ -131,5 +134,12 @@ public class Unit : MonoBehaviour
         return (float)actionPoints / maxActionPoints;
     }
 
+    public float GetHealthNormalized()
+    {
+        return healthSystem.GetHealthNormalized();
+    }
+
     public Transform GetActionCameraViewpoint() => actionCameraViewpoint;
+
+    public AttackAction GetAttackAction() => attackAction;
 }

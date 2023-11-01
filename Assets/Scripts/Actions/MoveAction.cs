@@ -112,4 +112,11 @@ public class MoveAction : BaseAction
     {
         return actionPointsCost;
     }
+
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        int targetCountAtGridPosition = unit.GetAttackAction().GetTargetCountAtPosition(gridPosition);
+        Debug.Log($"Move value {targetCountAtGridPosition * 10}");
+        return new EnemyAIAction(gridPosition, targetCountAtGridPosition * 10);
+    }
 }

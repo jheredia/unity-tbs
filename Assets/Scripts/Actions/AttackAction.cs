@@ -38,8 +38,13 @@ public class AttackAction : BaseAction
 
     public override List<GridPosition> GetValidActionGridPositionList()
     {
-        List<GridPosition> validGridPositionList = new List<GridPosition>();
         GridPosition unitGridPosition = unit.GetGridPosition();
+        return GetValidActionGridPositionList(unitGridPosition);
+    }
+
+    public List<GridPosition> GetValidActionGridPositionList(GridPosition unitGridPosition)
+    {
+        List<GridPosition> validGridPositionList = new();
         LevelGrid levelGrid = LevelGrid.Instance;
         for (int x = -maxAttackRange; x <= maxAttackRange; x++)
         {
@@ -64,6 +69,7 @@ public class AttackAction : BaseAction
     {
         targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
 
+        //Debug.Log(targetUnit);
         state = State.Aiming;
         float aimingStateTime = 1f;
         stateTimer = aimingStateTime;
@@ -148,4 +154,16 @@ public class AttackAction : BaseAction
     public Unit GetTargetUnit() => targetUnit;
 
     public int GetMaxAttackRange() => maxAttackRange;
+
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
+        Debug.Log($"Attack value {100 + Mathf.RoundToInt(1 - targetUnit.GetHealthNormalized() * 100f)}");
+        return new EnemyAIAction(gridPosition, 100 + Mathf.RoundToInt((1 - targetUnit.GetHealthNormalized()) * 100f));
+    }
+
+    public int GetTargetCountAtPosition(GridPosition gridPosition)
+    {
+        return GetValidActionGridPositionList(gridPosition).Count;
+    }
 }

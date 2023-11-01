@@ -52,7 +52,7 @@ public class UnitWorldUI : MonoBehaviour
 
     private void UpdateActionPointsBar()
     {
-        actionPointsBarImage.fillAmount = unit.GetActionPointsNormalized();
+        if (actionPointsBarImage != null) actionPointsBarImage.fillAmount = unit.GetActionPointsNormalized();
     }
 
     // Health UI updates
