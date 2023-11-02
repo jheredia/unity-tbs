@@ -808,8 +808,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ef75dd7d7e1fe4dbf0e1281d00bb3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionRange: 4
+  showRange: 0
   gridVisualType: 2
   rangeGridVisualType: 2
+  actionPointsCost: 1
   movementSpeed: 4
   baseMovementSpeed: 4
   maxMoveDistance: 3
@@ -825,8 +828,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a71fb6cf0b339e44f892c55a2f359680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionRange: 4
+  showRange: 0
   gridVisualType: 0
   rangeGridVisualType: 0
+  actionPointsCost: 1
 --- !u!114 &6529012804902868592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -839,8 +845,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bdca662f6d1d43299867e23e22450d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionRange: 5
+  showRange: 1
   gridVisualType: 3
   rangeGridVisualType: 4
+  actionPointsCost: 1
 --- !u!114 &2782708571653772254
 MonoBehaviour:
   m_ObjectHideFlags: 0

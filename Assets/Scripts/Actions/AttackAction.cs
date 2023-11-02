@@ -16,8 +16,6 @@ public class AttackAction : BaseAction
 
     private State state;
     private float stateTimer;
-
-    private int maxAttackRange = 7;
     private Unit targetUnit;
     private bool canShootBullet;
     private float rotateSpeed = 10f;
@@ -46,15 +44,15 @@ public class AttackAction : BaseAction
     {
         List<GridPosition> validGridPositionList = new();
         LevelGrid levelGrid = LevelGrid.Instance;
-        for (int x = -maxAttackRange; x <= maxAttackRange; x++)
+        for (int x = -actionRange; x <= actionRange; x++)
         {
-            for (int z = -maxAttackRange; z <= maxAttackRange; z++)
+            for (int z = -actionRange; z <= actionRange; z++)
             {
                 GridPosition offsetGridPosition = new GridPosition(x, z);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
                 if (!levelGrid.IsValidGridPosition(testGridPosition)) { continue; }// Not a valid grid position
                 int testDistance = Mathf.Abs(x) + Mathf.Abs(z); // Get the radius
-                if (testDistance > maxAttackRange) { continue; }// Outside of attack range
+                if (testDistance > actionRange) { continue; }// Outside of attack range
                 // validGridPositionList.Add(testGridPosition);
                 if (!levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) { continue; }// No units in that position
                 Unit targetUnit = levelGrid.GetUnitAtGridPosition(testGridPosition);
@@ -153,12 +151,9 @@ public class AttackAction : BaseAction
 
     public Unit GetTargetUnit() => targetUnit;
 
-    public int GetMaxAttackRange() => maxAttackRange;
-
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
     {
         Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
-        Debug.Log($"Attack value {100 + Mathf.RoundToInt(1 - targetUnit.GetHealthNormalized() * 100f)}");
         return new EnemyAIAction(gridPosition, 100 + Mathf.RoundToInt((1 - targetUnit.GetHealthNormalized()) * 100f));
     }
 
