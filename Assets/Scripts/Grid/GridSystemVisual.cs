@@ -115,7 +115,14 @@ public class GridSystemVisual : MonoBehaviour
                 break;
             case AttackAction attackAction:
                 gridVisualType = GridVisualType.Red;
-                ShowGridPositionRange(selectedUnit.GetGridPosition(), attackAction.GetMaxAttackRange(), GridVisualType.SoftRed);
+                if (attackAction.GetShowRange())
+                {
+                    ShowGridPositionRange(
+                        selectedUnit.GetGridPosition(),
+                        attackAction.GetActionRange(),
+                        GridVisualType.SoftRed
+                    );
+                }
                 break;
             case SpinAction spinAction:
                 gridVisualType = GridVisualType.Green;

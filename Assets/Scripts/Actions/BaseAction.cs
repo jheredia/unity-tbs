@@ -13,10 +13,11 @@ public abstract class BaseAction : MonoBehaviour
     protected Unit unit;
     protected bool isActive;
 
-    // [SerializeField, Min(0)] private int actionRange = 4;
-    // [SerializeField] private Color color = Color.white;
-    // [SerializeField] private bool showRange;
+    [Header("Range attributes")]
+    [SerializeField, Min(0)] protected int actionRange = 4;
+    [SerializeField] private bool showRange;
 
+    // [SerializeField] private Color color = Color.white;
     [SerializeField] GridSystemVisual.GridVisualType gridVisualType;
     [SerializeField] GridSystemVisual.GridVisualType rangeGridVisualType;
     [SerializeField] private int actionPointsCost = 1;
@@ -61,6 +62,9 @@ public abstract class BaseAction : MonoBehaviour
 
     public Unit GetUnit() => unit;
 
+    public int GetActionRange() => actionRange;
+
+    public bool GetShowRange() => showRange;
     public EnemyAIAction GetBestEnemyAIAction()
     {
         List<EnemyAIAction> enemyAIActionList = new List<EnemyAIAction>();
