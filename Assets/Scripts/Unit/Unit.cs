@@ -6,13 +6,6 @@ public class Unit : MonoBehaviour
 
     private GridPosition gridPosition;
     private HealthSystem healthSystem;
-    private MoveAction moveAction;
-
-    private SpinAction spinAction;
-
-    private CrouchAction crouchAction;
-
-    private AttackAction attackAction;
     private BaseAction[] baseActionArray;
     private int actionPoints = 3;
     private int maxActionPoints;
@@ -25,10 +18,6 @@ public class Unit : MonoBehaviour
     [SerializeField] private Transform actionCameraViewpoint;
     private void Awake()
     {
-        moveAction = GetComponent<MoveAction>();
-        spinAction = GetComponent<SpinAction>();
-        crouchAction = GetComponent<CrouchAction>();
-        attackAction = GetComponent<AttackAction>();
         baseActionArray = GetComponents<BaseAction>();
         healthSystem = GetComponent<HealthSystem>();
         maxActionPoints = actionPoints;
@@ -54,13 +43,6 @@ public class Unit : MonoBehaviour
             LevelGrid.Instance.UnitMovedGridPosition(this, oldGridPosition, newGridPosition);
         }
     }
-
-
-    public MoveAction GetMoveAction() => moveAction;
-
-    public SpinAction GetSpinAction() => spinAction;
-
-    public CrouchAction GetCrouchAction() => crouchAction;
 
     public GridPosition GetGridPosition() => gridPosition;
 
@@ -141,5 +123,12 @@ public class Unit : MonoBehaviour
 
     public Transform GetActionCameraViewpoint() => actionCameraViewpoint;
 
-    public AttackAction GetAttackAction() => attackAction;
+    public T GetAction<T>() where T : BaseAction
+    {
+        foreach (BaseAction baseAction in baseActionArray)
+        {
+            if (baseAction is T t) return t;
+        }
+        return null;
+    }
 }

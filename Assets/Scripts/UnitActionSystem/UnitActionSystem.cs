@@ -50,7 +50,7 @@ public class UnitActionSystem : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.C))
         {
-            CrouchAction unitCrouchAction = selectedUnit.GetCrouchAction();
+            CrouchAction unitCrouchAction = selectedUnit.GetAction<CrouchAction>();
             SetBusy();
             unitCrouchAction.TakeAction(mouseGridPosition, ClearBusy);
         }
@@ -114,19 +114,19 @@ public class UnitActionSystem : MonoBehaviour
         //Slow player (10%)
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
-            selectedUnit.GetMoveAction().SetMovementBuff(.9f);
+            selectedUnit.GetAction<MoveAction>().SetMovementBuff(.9f);
         }
 
         // Speed up player (10%)
         if (Input.GetKeyUp(KeyCode.UpArrow))
         {
-            selectedUnit.GetMoveAction().SetMovementBuff(1.1f);
+            selectedUnit.GetAction<MoveAction>().SetMovementBuff(1.1f);
         }
 
         // Reset the speed of the player to base speed
         if (Input.GetKeyUp(KeyCode.R))
         {
-            selectedUnit.GetMoveAction().SetMovementSpeed(selectedUnit.GetMoveAction().GetBaseMovementSpeed());
+            selectedUnit.GetAction<MoveAction>().SetMovementSpeed(selectedUnit.GetAction<MoveAction>().GetBaseMovementSpeed());
         }
     }
     /// <summary>
@@ -136,7 +136,7 @@ public class UnitActionSystem : MonoBehaviour
     private void SetSelectedUnit(Unit unit)
     {
         selectedUnit = unit;
-        SetSelectedAction(unit.GetMoveAction());
+        SetSelectedAction(unit.GetAction<MoveAction>());
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
     }
 
