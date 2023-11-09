@@ -13,6 +13,10 @@ public class PathNode
     private int hCost;
     private int fCost;
     private PathNode previousNode;
+
+    private bool isWalkable = true;
+
+    private string type;
     public PathNode(GridPosition gridPosition)
     {
         this.gridPosition = gridPosition;
@@ -40,4 +44,8 @@ public class PathNode
     public void ResetPreviousNodeValue() => previousNode = null;
 
     public GridPosition GetGridPosition() => gridPosition;
+
+    public void SetIsWalkable(bool isWalkable) => this.isWalkable = isWalkable;
+
+    public bool IsWalkable() => isWalkable;
 }
