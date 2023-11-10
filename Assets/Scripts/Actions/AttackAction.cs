@@ -14,6 +14,7 @@ public class AttackAction : BaseAction
         Reloading
     }
 
+    [SerializeField] private LayerMask obstaclesLayerMask;
     private State state;
     private float stateTimer;
     private Unit targetUnit;
@@ -57,6 +58,15 @@ public class AttackAction : BaseAction
                 if (!levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) { continue; }// No units in that position
                 Unit targetUnit = levelGrid.GetUnitAtGridPosition(testGridPosition);
                 if (targetUnit.IsEnemy() == unit.IsEnemy()) continue;
+                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
+                Vector3 shootDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
+                float unitShoulderHeight = 1.7f;
+                if (Physics.Raycast(
+                    unitWorldPosition + Vector3.up * unitShoulderHeight,
+                    shootDirection,
+                    Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
+                    obstaclesLayerMask
+                )) continue; // Blocked by an obstacle
                 validGridPositionList.Add(testGridPosition); // Add the grid position of the enemy
             }
         }

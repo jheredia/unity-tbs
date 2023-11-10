@@ -7,7 +7,7 @@ public class Unit : MonoBehaviour
     private GridPosition gridPosition;
     private HealthSystem healthSystem;
     private BaseAction[] baseActionArray;
-    private int actionPoints = 3;
+    private int actionPoints = 6;
     private int maxActionPoints;
 
     public static event EventHandler OnAnyActionPointsChanged;
