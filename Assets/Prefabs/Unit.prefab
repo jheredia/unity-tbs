@@ -850,6 +850,9 @@ MonoBehaviour:
   gridVisualType: 3
   rangeGridVisualType: 4
   actionPointsCost: 1
+  obstaclesLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &2782708571653772254
 MonoBehaviour:
   m_ObjectHideFlags: 0
