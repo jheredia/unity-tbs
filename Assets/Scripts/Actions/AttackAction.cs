@@ -23,6 +23,8 @@ public class AttackAction : BaseAction
 
     public event EventHandler<OnAttackEventArgs> OnAttack;
 
+    public static event EventHandler<OnAttackEventArgs> OnAnyAttack;
+
     public class OnAttackEventArgs : EventArgs
     {
         public Unit targetUnit;
@@ -150,12 +152,15 @@ public class AttackAction : BaseAction
     private void Shoot()
     {
         int damageDealt = UnityEngine.Random.Range(30, 51);
-        OnAttack?.Invoke(this, new OnAttackEventArgs
+        OnAttackEventArgs eventArgs = new OnAttackEventArgs
         {
             targetUnit = targetUnit,
             attackingUnit = unit,
             damageDealt = damageDealt,
-        });
+        };
+        OnAttack?.Invoke(this, eventArgs);
+        OnAnyAttack?.Invoke(this, eventArgs);
+
         targetUnit.Damage(damageDealt);
     }
 
