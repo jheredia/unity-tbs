@@ -20,7 +20,11 @@ public abstract class BaseAction : MonoBehaviour
     // [SerializeField] private Color color = Color.white;
     [SerializeField] GridSystemVisual.GridVisualType gridVisualType;
     [SerializeField] GridSystemVisual.GridVisualType rangeGridVisualType;
-    [SerializeField] private int actionPointsCost = 1;
+
+    [Header("Action cost and charges")]
+    [SerializeField, Min(0)] private int actionPointsCost = 1;
+    [SerializeField] private bool hasCharges = false;
+    [SerializeField, Min(0)] private int actionCharges = 1;
 
     protected virtual void Awake()
     {
@@ -82,4 +86,10 @@ public abstract class BaseAction : MonoBehaviour
     }
 
     public abstract EnemyAIAction GetEnemyAIAction(GridPosition gridPosition);
+
+    public bool HasCharges() => hasCharges;
+
+    public int GetAvailableCharges() => actionCharges;
+
+    public void SetAvailableCharges(int actionCharges) => this.actionCharges = actionCharges;
 }

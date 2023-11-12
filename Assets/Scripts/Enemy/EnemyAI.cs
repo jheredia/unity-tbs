@@ -68,6 +68,7 @@ public class Enemy : MonoBehaviour
     {
         foreach (Unit enemyUnit in UnitManager.Instance.GetEnemyUnitList())
         {
+            if (enemyUnit.IsDead()) return false;
             if (TryTakeEnemyAIAction(enemyUnit, onEnemyAIActionComplete)) return true;
         }
         return false;

@@ -814,6 +814,8 @@ MonoBehaviour:
   gridVisualType: 2
   rangeGridVisualType: 2
   actionPointsCost: 1
+  hasCharges: 0
+  actionCharges: 1
   movementSpeed: 4
   baseMovementSpeed: 4
   maxMoveDistance: 3
@@ -834,6 +836,8 @@ MonoBehaviour:
   gridVisualType: 0
   rangeGridVisualType: 0
   actionPointsCost: 1
+  hasCharges: 0
+  actionCharges: 1
 --- !u!114 &6529012804902868592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -850,7 +854,9 @@ MonoBehaviour:
   showRange: 1
   gridVisualType: 3
   rangeGridVisualType: 4
-  actionPointsCost: 1
+  actionPointsCost: 2
+  hasCharges: 0
+  actionCharges: 1
   obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -870,10 +876,12 @@ MonoBehaviour:
   showRange: 0
   gridVisualType: 0
   rangeGridVisualType: 0
-  actionPointsCost: 1
+  actionPointsCost: 3
+  hasCharges: 1
+  actionCharges: 2
   obstaclesLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   grenadeProjectilePrefab: {fileID: 3597587344006130414, guid: 75b295d581fcf496dbc916449fff24fc,
     type: 3}
 --- !u!114 &2782708571653772254

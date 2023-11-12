@@ -1,27 +1,46 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class GrenadeProjectile : MonoBehaviour
 {
     private Vector3 targetPosition;
     private Action onGrenadeBehaviourComplete;
+    public static event EventHandler OnAnyGrenadeExplosion;
+    [SerializeField] private Transform grenadeExplosionVFXPrefab;
+    [SerializeField] private TrailRenderer trailRenderer;
+    [SerializeField] private AnimationCurve arcYAnimationCurve;
+
+    private float totalDistance;
+    private Vector3 positionXZ;
+
     public void Setup(GridPosition targetGridPosition, Action onGrenadeBehaviourComplete)
     {
-        targetPosition = LevelGrid.Instance.GetWorldPosition(targetGridPosition);
         this.onGrenadeBehaviourComplete = onGrenadeBehaviourComplete;
+        targetPosition = LevelGrid.Instance.GetWorldPosition(targetGridPosition);
+        positionXZ = transform.position;
+        positionXZ.y = 0;
+        totalDistance = Vector3.Distance(positionXZ, targetPosition);
     }
 
     private void Update()
     {
-        Vector3 moveDirection = (targetPosition - transform.position).normalized;
+        Vector3 moveDirection = (targetPosition - positionXZ).normalized;
         float moveSpeed = 15f;
-        transform.position += moveDirection * moveSpeed * Time.deltaTime;
+        positionXZ += moveDirection * moveSpeed * Time.deltaTime;
 
+        float distance = Vector3.Distance(positionXZ, targetPosition);
+        float distanceNormalized = 1 - (distance / totalDistance);
+
+        float positionY = arcYAnimationCurve.Evaluate(distanceNormalized);
+
+        float maxHeight = totalDistance / 4f;
+        transform.position = new Vector3(positionXZ.x, positionY * maxHeight, positionXZ.z);
         float deltaDistance = .2f;
         float damageDropdown = 5; // Based on the distance from the target position, do less damage if it's further away
-        if (Vector3.Distance(transform.position, targetPosition) < deltaDistance)
+        if (Vector3.Distance(positionXZ, targetPosition) < deltaDistance)
         {
             float damageRadius = 4f;
             Collider[] colliderArray = Physics.OverlapSphere(targetPosition, damageRadius);
@@ -35,8 +54,13 @@ public class GrenadeProjectile : MonoBehaviour
                     unit.Damage(Mathf.Abs(finalDamage));
                 }
             }
-            onGrenadeBehaviourComplete();
+
+
+            OnAnyGrenadeExplosion?.Invoke(this, EventArgs.Empty);
+            if (trailRenderer != null) trailRenderer.transform.parent = null;
+            Instantiate(grenadeExplosionVFXPrefab, targetPosition + Vector3.up * 1f, Quaternion.identity);
             Destroy(gameObject);
+            onGrenadeBehaviourComplete();
         }
     }
 }

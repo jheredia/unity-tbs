@@ -131,4 +131,6 @@ public class Unit : MonoBehaviour
         }
         return null;
     }
+
+    public bool IsDead() => healthSystem.GetHealth() == 0;
 }
