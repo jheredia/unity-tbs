@@ -46,13 +46,18 @@ public class GrenadeProjectile : MonoBehaviour
             Collider[] colliderArray = Physics.OverlapSphere(targetPosition, damageRadius);
             foreach (Collider collider in colliderArray)
             {
+                int damageDealt = UnityEngine.Random.Range(20, 40);
+                float distanceFromTarget = Vector3.Distance(collider.transform.position, targetPosition);
+                int finalDamage = Mathf.Abs(Mathf.RoundToInt(damageDealt - (distanceFromTarget * damageDropdown)));
                 if (collider.TryGetComponent<Unit>(out Unit unit))
                 {
-                    int damageDealt = UnityEngine.Random.Range(20, 40);
-                    float distanceFromTarget = Vector3.Distance(collider.transform.position, targetPosition);
-                    int finalDamage = Mathf.RoundToInt(damageDealt - (distanceFromTarget * damageDropdown));
-                    unit.Damage(Mathf.Abs(finalDamage));
+                    unit.Damage(finalDamage);
                 }
+                if (collider.TryGetComponent<DestructibleCrate>(out DestructibleCrate destructibleCrate))
+                {
+                    destructibleCrate.Damage(finalDamage);
+                }
+
             }
 
 

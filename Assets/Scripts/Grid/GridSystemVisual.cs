@@ -61,10 +61,13 @@ public class GridSystemVisual : MonoBehaviour
         levelGrid.OnAnyUnitMovedGridPosition += LevelGrid_OnAnyUnitMovedGridPosition;
         Unit.OnAnyUnitDied += Unit_OnAnyUnitDied;
         Unit.OnAnyUnitSpawned += Unit_OnAnyUnitSpawned;
+        DestructibleCrate.OnAnyCrateDestroyed += DestructibleCrate_OnAnyCrateDestroyed;
         UpdateGridVisual();
     }
 
-    public void HideAllGridPositions()
+
+
+    private void HideAllGridPositions()
     {
         foreach (GridSystemVisualSingle gridSystemVisualSingle in gridSystemVisualSingleArray)
         {
@@ -72,7 +75,7 @@ public class GridSystemVisual : MonoBehaviour
         }
     }
 
-    public void ShowGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
+    private void ShowGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
     {
         foreach (GridPosition gridPosition in gridPositionList)
         {
@@ -81,7 +84,7 @@ public class GridSystemVisual : MonoBehaviour
         }
     }
 
-    public void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
+    private void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
     {
 
 
@@ -161,6 +164,12 @@ public class GridSystemVisual : MonoBehaviour
     {
         UpdateGridVisual();
     }
+
+    private void DestructibleCrate_OnAnyCrateDestroyed(object sender, EventArgs e)
+    {
+        UpdateGridVisual();
+    }
+
     private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType)
     {
         foreach (GridVisualTypeMaterial gridVisualTypeMaterial in gridVisualTypeMaterialList)
