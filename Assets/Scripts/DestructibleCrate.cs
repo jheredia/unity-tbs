@@ -16,7 +16,7 @@ public class DestructibleCrate : MonoBehaviour
     public void Damage(int damage)
     {
         hitPoints -= damage;
-        if (hitPoints <= 0)
+        if (hitPoints < 0)
         {
             Transform destroyedCrateTransform = Instantiate(destroyedCratePrefab, transform.position, transform.rotation);
             ApplyExplosionToChildren(destroyedCratePrefab, 1500f, transform.position, 100f);
