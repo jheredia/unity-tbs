@@ -24,14 +24,20 @@ public class DestructibleCrate : MonoBehaviour
         return gridPosition;
     }
 
+    // Damage without an unspecificed origin will assume it's the same position as the transform
     public void Damage(int damage)
+    {
+        Damage(damage, transform.position);
+    }
+
+    public void Damage(int damage, Vector3 damageOrigin, float explosionForce = 150f, float explosionRadius = 10f)
     {
         hitPoints -= damage;
         if (hitPoints <= 0)
         {
             Transform crateDestroyedTransform = Instantiate(crateDestroyedPrefab, transform.position, transform.rotation);
 
-            ApplyExplosionToChildren(crateDestroyedTransform, 150f, transform.position, 10f);
+            ApplyExplosionToChildren(crateDestroyedTransform, explosionForce, damageOrigin, explosionRadius);
 
             Destroy(gameObject);
 

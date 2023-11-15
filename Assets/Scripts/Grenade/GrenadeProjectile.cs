@@ -55,7 +55,7 @@ public class GrenadeProjectile : MonoBehaviour
                 }
                 if (collider.TryGetComponent<DestructibleCrate>(out DestructibleCrate destructibleCrate))
                 {
-                    destructibleCrate.Damage(finalDamage);
+                    destructibleCrate.Damage(finalDamage, targetPosition);
                 }
 
             }
