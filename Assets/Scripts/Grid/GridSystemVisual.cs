@@ -61,7 +61,7 @@ public class GridSystemVisual : MonoBehaviour
         levelGrid.OnAnyUnitMovedGridPosition += LevelGrid_OnAnyUnitMovedGridPosition;
         Unit.OnAnyUnitDied += Unit_OnAnyUnitDied;
         Unit.OnAnyUnitSpawned += Unit_OnAnyUnitSpawned;
-        DestructibleCrate.OnAnyCrateDestroyed += DestructibleCrate_OnAnyCrateDestroyed;
+        DestructibleCrate.OnAnyDestroyed += DestructibleCrate_OnAnyCrateDestroyed;
         UpdateGridVisual();
     }
 

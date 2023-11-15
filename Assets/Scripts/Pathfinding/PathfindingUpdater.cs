@@ -8,7 +8,7 @@ public class PathfindingUpdater : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        DestructibleCrate.OnAnyCrateDestroyed += DestructibleCrate_OnAnyCrateDestroyed;
+        DestructibleCrate.OnAnyDestroyed += DestructibleCrate_OnAnyCrateDestroyed;
         Unit.OnAnyUnitDied += Unit_OnAnyUnitDied;
         Unit.OnAnyUnitSpawned += Unit_OnAnyUnitSpawned;
     }

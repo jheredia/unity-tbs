@@ -26,13 +26,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6081840131592876949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 4}
+  m_LocalPosition: {x: 0, y: 0, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4184504122780349485}
   m_Father: {fileID: 0}
-  m_RootOrder: 28
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &307852033101739326
 BoxCollider:
@@ -67,8 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd91eed4bc2d4f93b890a193fc080dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPoints: 0
-  destroyedCratePrefab: {fileID: 5616901179582502914, guid: 6f06cdc9c90e14b689e780eab4c7dd05,
+  crateDestroyedPrefab: {fileID: 5732773684867799349, guid: a488b700b71332143b38100217f073f7,
     type: 3}
 --- !u!1001 &4187641753853564419
 PrefabInstance:
@@ -150,7 +149,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: dcc9a0b939c99774089653966acc8d75, type: 2}
+      objectReference: {fileID: 2100000, guid: 40347e2344b3ed04a8165ea238a93a0b, type: 2}
     - target: {fileID: 64008491219568898, guid: e1b9e21039285c042b92ea66c7f1c444,
         type: 3}
       propertyPath: m_Enabled
