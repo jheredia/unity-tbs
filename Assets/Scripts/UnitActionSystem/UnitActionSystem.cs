@@ -46,14 +46,6 @@ public class UnitActionSystem : MonoBehaviour
         if (TryHandleUnitSelection()) return;
         if (!TurnSystem.Instance.IsPlayerTurn()) return;
         HandleSelectedAction();
-        GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
-
-        if (Input.GetKeyUp(KeyCode.C))
-        {
-            CrouchAction unitCrouchAction = selectedUnit.GetAction<CrouchAction>();
-            SetBusy();
-            unitCrouchAction.TakeAction(mouseGridPosition, ClearBusy);
-        }
         HandleMovementSpeedInteractions();
     }
 

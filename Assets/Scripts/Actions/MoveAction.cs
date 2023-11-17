@@ -12,7 +12,6 @@ public class MoveAction : BaseAction
     [SerializeField] private float baseMovementSpeed = 4f;
     [SerializeField] readonly float stoppingDelta = .1f;
     [SerializeField] readonly float rotateSpeed = 10f;
-    [SerializeField] private int maxMoveDistance = 3;
     const int actionPointsCost = 1;
 
     private List<Vector3> positionList;
@@ -100,9 +99,9 @@ public class MoveAction : BaseAction
         List<GridPosition> validGridPositionList = new List<GridPosition>();
         GridPosition unitGridPosition = unit.GetGridPosition();
         LevelGrid levelGrid = LevelGrid.Instance;
-        for (int x = -maxMoveDistance; x <= maxMoveDistance; x++)
+        for (int x = -actionRange; x <= actionRange; x++)
         {
-            for (int z = -maxMoveDistance; z <= maxMoveDistance; z++)
+            for (int z = -actionRange; z <= actionRange; z++)
             {
                 GridPosition offsetGridPosition = new GridPosition(x, z);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
@@ -113,7 +112,7 @@ public class MoveAction : BaseAction
                 if (!Pathfinding.Instance.HasPath(unitGridPosition, testGridPosition)) continue;
                 int pathfindingDistanceMultiplier = 10;
                 if (Pathfinding.Instance.GetPathLength(
-                    unitGridPosition, testGridPosition) > maxMoveDistance * pathfindingDistanceMultiplier
+                    unitGridPosition, testGridPosition) > actionRange * pathfindingDistanceMultiplier
                 ) continue;
                 validGridPositionList.Add(testGridPosition);
             }

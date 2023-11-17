@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class GrenadeAction : BaseAction
 {
-    private int maxThrowDistance = 7;
     [SerializeField] private LayerMask obstaclesLayerMask;
     [SerializeField] private Transform grenadeProjectilePrefab;
     public static event EventHandler OnAnyGrenadeLaunched;
@@ -44,15 +43,15 @@ public class GrenadeAction : BaseAction
         List<GridPosition> validGridPositionList = new();
         LevelGrid levelGrid = LevelGrid.Instance;
         GridPosition unitGridPosition = unit.GetGridPosition();
-        for (int x = -maxThrowDistance; x <= maxThrowDistance; x++)
+        for (int x = -actionRange; x <= actionRange; x++)
         {
-            for (int z = -maxThrowDistance; z <= maxThrowDistance; z++)
+            for (int z = -actionRange; z <= actionRange; z++)
             {
                 GridPosition offsetGridPosition = new GridPosition(x, z);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
                 if (!levelGrid.IsValidGridPosition(testGridPosition)) { continue; }// Not a valid grid position
                 int testDistance = Mathf.Abs(x) + Mathf.Abs(z); // Get the radius
-                if (testDistance > maxThrowDistance) { continue; }// Outside of attack rangei
+                if (testDistance > actionRange) { continue; }// Outside of attack rangei
                 // Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
                 // Vector3 shootDirection = (LevelGrid.Instance.GetWorldPosition(testGridPosition) - unitWorldPosition).normalized;
                 // float unitShoulderHeight = 1.7f;

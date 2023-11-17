@@ -66,7 +66,7 @@ public abstract class BaseAction : MonoBehaviour
 
     public Unit GetUnit() => unit;
 
-    public int GetActionRange() => actionRange;
+    public virtual int GetActionRange() => actionRange;
 
     public bool GetShowRange() => showRange;
     public EnemyAIAction GetBestEnemyAIAction()
