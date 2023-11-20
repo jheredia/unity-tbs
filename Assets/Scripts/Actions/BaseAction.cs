@@ -92,4 +92,14 @@ public abstract class BaseAction : MonoBehaviour
     public int GetAvailableCharges() => actionCharges;
 
     public void SetAvailableCharges(int actionCharges) => this.actionCharges = actionCharges;
+
+    // Check if the action is one limited by charges and if it has charges available
+    public virtual bool HasChargesAvailable()
+    {
+        if (hasCharges)
+        {
+            return actionCharges > 0;
+        }
+        return true;
+    }
 }

@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &31754961624646668
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6379053461086071543}
-  m_Layer: 0
-  m_Name: ActionCameraViewPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6379053461086071543
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 31754961624646668}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 1.7, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3144902361055536421}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &420154258698574094
 GameObject:
   m_ObjectHideFlags: 0
@@ -42,7 +11,7 @@ GameObject:
   - component: {fileID: 5142614523868921759}
   - component: {fileID: 508026404485752404}
   - component: {fileID: 714311427439983760}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: HealthPointsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +146,7 @@ GameObject:
   - component: {fileID: 8021658549526621208}
   - component: {fileID: 5940985424769951313}
   - component: {fileID: 1817476194888267115}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: ActionPointsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,7 +281,7 @@ GameObject:
   - component: {fileID: 1044694601091804980}
   - component: {fileID: 5019558036830592978}
   - component: {fileID: 6967864194422317436}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: ActionPointsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -445,7 +414,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 570047484554400302}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: HealthUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -485,7 +454,7 @@ GameObject:
   - component: {fileID: 1869783074504403537}
   - component: {fileID: 3354583141766990940}
   - component: {fileID: 1808828484677948284}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -562,7 +531,7 @@ GameObject:
   - component: {fileID: 2059509763747813140}
   - component: {fileID: 2286317834837288352}
   - component: {fileID: 3421288028560060953}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -653,7 +622,7 @@ GameObject:
   - component: {fileID: 8916375373597676758}
   - component: {fileID: 7415551955962999323}
   - component: {fileID: 7326702083844892413}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -738,6 +707,8 @@ GameObject:
   - component: {fileID: 7156410361342790082}
   - component: {fileID: -3280614210795262535}
   - component: {fileID: -1832430624420559496}
+  - component: {fileID: -1018604794083851037}
+  - component: {fileID: 4250353666471329011}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -760,7 +731,6 @@ Transform:
   - {fileID: 3149342315483495609}
   - {fileID: 8395969232960759049}
   - {fileID: 2498510199331033986}
-  - {fileID: 6379053461086071543}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -777,7 +747,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEnemy: 0
-  actionCameraViewpoint: {fileID: 6379053461086071543}
 --- !u!65 &6620876567883648889
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -877,7 +846,7 @@ MonoBehaviour:
   showRange: 0
   gridVisualType: 0
   rangeGridVisualType: 0
-  actionPointsCost: 3
+  actionPointsCost: 1
   hasCharges: 1
   actionCharges: 2
   obstaclesLayerMask:
@@ -964,6 +933,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rifleTransform: {fileID: 3149312246544879602}
   swordTransform: {fileID: 8201785933461538104}
+--- !u!114 &-1018604794083851037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3144902361055536443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d1336fb1dc764f1aaff244585d124cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitPortraitCamera: {fileID: 0}
+--- !u!114 &4250353666471329011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3144902361055536443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56b7494f83d2347e59f3d10bf21e8de5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionRange: 1
+  showRange: 1
+  gridVisualType: 1
+  rangeGridVisualType: 0
+  actionPointsCost: 1
+  hasCharges: 0
+  actionCharges: 1
 --- !u!1 &3854700103265592961
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,7 +1225,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7692154462322921861}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: ActionPointsUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1262,7 +1263,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3768488188537705266}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: ActionPointsBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1331,7 +1332,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2306374401573706470}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: ExperienceUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1369,7 +1370,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4094225735148010937}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1410,7 +1411,7 @@ GameObject:
   - component: {fileID: 6469351384055378222}
   - component: {fileID: 1634685823494133224}
   - component: {fileID: 2185139254743441552}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1499,7 +1500,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9075669799458707629}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: ActionPointsBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1540,7 +1541,7 @@ GameObject:
   - component: {fileID: 8681756269601942571}
   - component: {fileID: 6680300146439644866}
   - component: {fileID: 4864222182637558178}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1634,7 +1635,7 @@ GameObject:
   - component: {fileID: 9133999918990567768}
   - component: {fileID: 6974443481763631461}
   - component: {fileID: 5513588428247678419}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: UnitWorldUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1768,7 +1769,7 @@ GameObject:
   - component: {fileID: 4705403772891316367}
   - component: {fileID: 5870565968108211146}
   - component: {fileID: 5900309722808701669}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -70,13 +70,11 @@ public class GrenadeAction : BaseAction
 
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
-        if (HasCharges() && GetAvailableCharges() > 0)
-        {
-            Transform grenadeProjectileTransform = Instantiate(grenadeProjectilePrefab, unit.GetWorldPosition(), Quaternion.identity);
-            grenadeProjectileTransform.GetComponent<GrenadeProjectile>().Setup(gridPosition, OnGrenadeBehaviourComplete);
-            OnAnyGrenadeLaunched?.Invoke(this, EventArgs.Empty);
-            ActionStart(onActionComplete);
-        }
+
+        Transform grenadeProjectileTransform = Instantiate(grenadeProjectilePrefab, unit.GetWorldPosition(), Quaternion.identity);
+        grenadeProjectileTransform.GetComponent<GrenadeProjectile>().Setup(gridPosition, OnGrenadeBehaviourComplete);
+        OnAnyGrenadeLaunched?.Invoke(this, EventArgs.Empty);
+        ActionStart(onActionComplete);
     }
 
     private void Update()

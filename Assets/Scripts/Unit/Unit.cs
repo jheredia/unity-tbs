@@ -15,11 +15,12 @@ public class Unit : MonoBehaviour
     public static event EventHandler OnAnyUnitDied;
 
     [SerializeField] private bool isEnemy;
-    [SerializeField] private Transform actionCameraViewpoint;
+
     private void Awake()
     {
         baseActionArray = GetComponents<BaseAction>();
         healthSystem = GetComponent<HealthSystem>();
+
         maxActionPoints = actionPoints;
     }
 
@@ -121,7 +122,7 @@ public class Unit : MonoBehaviour
         return healthSystem.GetHealthNormalized();
     }
 
-    public Transform GetActionCameraViewpoint() => actionCameraViewpoint;
+
 
     public T GetAction<T>() where T : BaseAction
     {
@@ -133,4 +134,6 @@ public class Unit : MonoBehaviour
     }
 
     public bool IsDead() => healthSystem.GetHealth() == 0;
+
+    public string GetName() => gameObject.ToString();
 }

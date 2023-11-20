@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class MeleeAction : BaseAction
 {
-    private readonly int maxMeleeDistance = 1;
     private enum State
     {
         SwingingSwordBeforeHit,
@@ -77,9 +76,9 @@ public class MeleeAction : BaseAction
         List<GridPosition> validGridPositionList = new();
         LevelGrid levelGrid = LevelGrid.Instance;
         GridPosition unitGridPosition = unit.GetGridPosition();
-        for (int x = -maxMeleeDistance; x <= maxMeleeDistance; x++)
+        for (int x = -actionRange; x <= actionRange; x++)
         {
-            for (int z = -maxMeleeDistance; z <= maxMeleeDistance; z++)
+            for (int z = -actionRange; z <= actionRange; z++)
             {
                 GridPosition offsetGridPosition = new(x, z);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;

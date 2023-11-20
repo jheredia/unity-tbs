@@ -55,7 +55,11 @@ public class UnitActionSystem : MonoBehaviour
         {
             Vector3 mousePosition = MouseWorld.GetPosition();
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(mousePosition);
+            // If it's not a valid grid position
             if (!selectedAction.IsValidActionGridPosition(mouseGridPosition)) return;
+            // If this action uses charges and doesn't have any available
+            if (!selectedAction.HasChargesAvailable()) return;
+            // If selected unit doesn't have enough action points
             if (!selectedUnit.TrySpendActionPointsOnAction(selectedAction)) return;
             SetBusy();
             selectedAction.TakeAction(mouseGridPosition, ClearBusy);

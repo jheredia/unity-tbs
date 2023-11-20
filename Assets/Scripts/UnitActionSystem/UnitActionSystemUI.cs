@@ -10,7 +10,6 @@ public class UnitActionSystemUI : MonoBehaviour
 
     [SerializeField] private Transform actionButtonPrefab;
     [SerializeField] private Transform actionButtonContainerTransform;
-    [SerializeField] private TextMeshProUGUI actionPointsText;
     [SerializeField] private TextMeshProUGUI actionPointsCostText;
 
     private List<ActionButtonUI> actionButtonUIs;
@@ -24,13 +23,13 @@ public class UnitActionSystemUI : MonoBehaviour
     {
         UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;
         UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged;
-        UnitActionSystem.Instance.OnActionStarted += UnitActionSystem_OnActionStarted;
-        Unit.OnAnyActionPointsChanged += Unit_OnAnyActionPointsChanged;
+
+
 
         CreateUnitActionButtons();
         UpdateSelectedVisual();
         UpdateActionPointsCost();
-        UpdateActionPoints();
+
     }
     private void CreateUnitActionButtons()
     {
@@ -64,7 +63,6 @@ public class UnitActionSystemUI : MonoBehaviour
     {
         CreateUnitActionButtons();
         UpdateSelectedVisual();
-        UpdateActionPoints();
     }
 
     private void UnitActionSystem_OnSelectedActionChanged(object sender, EventArgs empty)
@@ -73,10 +71,6 @@ public class UnitActionSystemUI : MonoBehaviour
         UpdateActionPointsCost();
     }
 
-    private void UnitActionSystem_OnActionStarted(object sender, EventArgs empty)
-    {
-        UpdateActionPoints();
-    }
     private void UpdateSelectedVisual()
     {
         foreach (ActionButtonUI actionButtonUI in actionButtonUIs)
@@ -91,14 +85,4 @@ public class UnitActionSystemUI : MonoBehaviour
         actionPointsCostText.text = $"Action Cost: {selectedBaseAction.GetActionPointsCost()}";
     }
 
-    private void UpdateActionPoints()
-    {
-        Unit selectedUnit = UnitActionSystem.Instance.GetSelectedUnit();
-        actionPointsText.text = $"Action Points: {selectedUnit.GetActionPoints()}";
-    }
-
-    private void Unit_OnAnyActionPointsChanged(object sender, EventArgs empty)
-    {
-        UpdateActionPoints();
-    }
 }

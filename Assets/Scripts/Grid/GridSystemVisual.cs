@@ -165,7 +165,9 @@ public class GridSystemVisual : MonoBehaviour
             case CrouchAction crouchAction:
                 gridVisualType = GridVisualType.Yellow;
                 break;
-
+            case InteractAction interactAction:
+                gridVisualType = GridVisualType.Green;
+                break;
         }
         // ShowGridPositionRange(
         //     selectedUnit.GetGridPosition(),
