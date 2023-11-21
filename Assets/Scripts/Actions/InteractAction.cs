@@ -12,7 +12,10 @@ public class InteractAction : BaseAction
 
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
     {
-        throw new NotImplementedException();
+        return new EnemyAIAction(
+            gridPosition,
+            0
+        );
     }
 
     public override List<GridPosition> GetValidActionGridPositionList()
@@ -39,15 +42,10 @@ public class InteractAction : BaseAction
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
         IInteractable interactable = LevelGrid.Instance.GetInteractableAtGridPosition(gridPosition);
-        interactable.Interact(OnInteractComplete);
+        interactable.Interact(OnInteractionComplete);
         ActionStart(onActionComplete);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -55,7 +53,7 @@ public class InteractAction : BaseAction
         if (!isActive) return;
     }
 
-    private void OnInteractComplete()
+    private void OnInteractionComplete()
     {
         ActionComplete();
     }

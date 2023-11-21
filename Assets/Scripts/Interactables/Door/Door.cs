@@ -57,7 +57,6 @@ public class Door : MonoBehaviour, IInteractable
         timer = .5f;
         if (isOpen) Close();
         else Open();
-        onInteractionComplete();
     }
 
     public void Open()

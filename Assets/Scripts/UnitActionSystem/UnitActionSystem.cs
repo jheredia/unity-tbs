@@ -51,7 +51,7 @@ public class UnitActionSystem : MonoBehaviour
 
     private void HandleSelectedAction()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (InputManager.Instance.IsLeftMouseButtonDownThisFrame())
         {
             Vector3 mousePosition = MouseWorld.GetPosition();
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(mousePosition);
@@ -86,9 +86,10 @@ public class UnitActionSystem : MonoBehaviour
     /// <returns>True if an Unit component was hit and it's not the same one; False otherwise</returns>
     private bool TryHandleUnitSelection()
     {
-        if (Input.GetMouseButtonDown(0))
+        InputManager inputManagerInstance = InputManager.Instance;
+        if (inputManagerInstance.IsLeftMouseButtonDownThisFrame())
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(inputManagerInstance.GetMouseScreenPosition());
             if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, unitsLayerMask))
             {
                 if (raycastHit.transform.TryGetComponent(out Unit unit) && unit != selectedUnit)
@@ -107,20 +108,22 @@ public class UnitActionSystem : MonoBehaviour
     /// </summary>
     private void HandleMovementSpeedInteractions()
     {
+        InputManager inputManagerInstance = InputManager.Instance;
+
         //Slow player (10%)
-        if (Input.GetKeyUp(KeyCode.DownArrow))
+        if (inputManagerInstance.GetKeyUp(KeyCode.DownArrow))
         {
             selectedUnit.GetAction<MoveAction>().SetMovementBuff(.9f);
         }
 
         // Speed up player (10%)
-        if (Input.GetKeyUp(KeyCode.UpArrow))
+        if (inputManagerInstance.GetKeyUp(KeyCode.UpArrow))
         {
             selectedUnit.GetAction<MoveAction>().SetMovementBuff(1.1f);
         }
 
         // Reset the speed of the player to base speed
-        if (Input.GetKeyUp(KeyCode.R))
+        if (inputManagerInstance.GetKeyUp(KeyCode.R))
         {
             selectedUnit.GetAction<MoveAction>().SetMovementSpeed(selectedUnit.GetAction<MoveAction>().GetBaseMovementSpeed());
         }
