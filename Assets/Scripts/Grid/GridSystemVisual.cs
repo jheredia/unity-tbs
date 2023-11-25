@@ -62,9 +62,9 @@ public class GridSystemVisual : MonoBehaviour
         Unit.OnAnyUnitDied += Unit_OnAnyUnitDied;
         Unit.OnAnyUnitSpawned += Unit_OnAnyUnitSpawned;
         DestructibleCrate.OnAnyDestroyed += DestructibleCrate_OnAnyCrateDestroyed;
+        Barrel.OnAnyDestroyed += Barrel_OnAnyDestroyed;
         UpdateGridVisual();
     }
-
 
 
     private void HideAllGridPositions()
@@ -200,6 +200,11 @@ public class GridSystemVisual : MonoBehaviour
     }
 
     private void DestructibleCrate_OnAnyCrateDestroyed(object sender, EventArgs e)
+    {
+        UpdateGridVisual();
+    }
+
+    private void Barrel_OnAnyDestroyed(object sender, EventArgs e)
     {
         UpdateGridVisual();
     }

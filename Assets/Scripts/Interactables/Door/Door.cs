@@ -6,6 +6,13 @@ using UnityEngine;
 
 public class Door : MonoBehaviour, IInteractable
 {
+
+    public static event EventHandler<OnDoorInteractedEventArgs> OnAnyDoorOpened;
+    public event EventHandler OnDoorOpened;
+
+    public event EventHandler OnDoorClosed;
+    public static event EventHandler<OnDoorInteractedEventArgs> OnAnyDoorClosed;
+
     private enum State
     {
         Open,
@@ -16,7 +23,21 @@ public class Door : MonoBehaviour, IInteractable
         Jammed
     }
 
+    public class OnDoorInteractedEventArgs : EventArgs
+    {
+        public List<Sector> connectedSectors;
+    }
+
     [SerializeField] bool isOpen;
+    [SerializeField] bool isLocked;
+
+    [SerializeField] Light innerLight;
+    [SerializeField] Light outerLight;
+
+    [Header("Connecting sectors")]
+    [SerializeField] Sector sector1;
+    [SerializeField] Sector sector2;
+
     private GridPosition gridPosition;
     private Animator animator;
     private const string IS_OPEN_PARAMETER = "IsOpen";
@@ -33,8 +54,14 @@ public class Door : MonoBehaviour, IInteractable
     {
         gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.SetInteractableAtGridPosition(gridPosition, this);
-        if (isOpen) Open();
-        else Close();
+        if (isOpen)
+            Open();
+        else
+            Close();
+        if (isLocked)
+            ChangeLights(Color.red);
+        else
+            ChangeLights(Color.green);
     }
 
     // Update is called once per frame
@@ -55,15 +82,29 @@ public class Door : MonoBehaviour, IInteractable
         this.onInteractionComplete = onInteractionComplete;
         isActive = true;
         timer = .5f;
+        if (isLocked)
+        {
+            Unit selectedUnit = UnitActionSystem.Instance.GetSelectedUnit();
+            selectedUnit.SetKeys(selectedUnit.GetKeys() - 1);
+            Unlock();
+            ChangeLights(Color.green);
+        }
         if (isOpen) Close();
         else Open();
     }
 
     public void Open()
     {
+
         isOpen = true;
         animator.SetBool(IS_OPEN_PARAMETER, isOpen);
         Pathfinding.Instance.SetIsWalkableGridPosition(gridPosition, true);
+        OnDoorInteractedEventArgs eventArgs = new OnDoorInteractedEventArgs
+        {
+            connectedSectors = new List<Sector> { sector1, sector2 }
+        };
+        OnAnyDoorOpened?.Invoke(this, eventArgs);
+        OnDoorOpened?.Invoke(this, eventArgs);
     }
 
     public void Close()
@@ -72,5 +113,27 @@ public class Door : MonoBehaviour, IInteractable
         animator.SetBool(IS_OPEN_PARAMETER, isOpen);
         // Update the pathfinding script to indicate that this position can't be used
         Pathfinding.Instance.SetIsWalkableGridPosition(gridPosition, false);
+        OnDoorInteractedEventArgs eventArgs = new OnDoorInteractedEventArgs
+        {
+            connectedSectors = new List<Sector> { sector1, sector2 }
+        };
+        OnAnyDoorClosed?.Invoke(this, eventArgs);
+        OnDoorClosed?.Invoke(this, eventArgs);
+    }
+
+    private void ChangeLights(Color color)
+    {
+        innerLight.color = color;
+        outerLight.color = color;
+    }
+
+    private void Lock()
+    {
+        isLocked = true;
+    }
+
+    private void Unlock()
+    {
+        isLocked = false;
     }
 }

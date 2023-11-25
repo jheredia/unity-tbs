@@ -15,12 +15,15 @@ public class Unit : MonoBehaviour
     public static event EventHandler OnAnyUnitDied;
 
     [SerializeField] private bool isEnemy;
+    [SerializeField] private bool isAwake;
+
+    [SerializeField] private int keys;
 
     private void Awake()
     {
         baseActionArray = GetComponents<BaseAction>();
         healthSystem = GetComponent<HealthSystem>();
-
+        isAwake = false;
         maxActionPoints = actionPoints;
     }
 
@@ -136,4 +139,29 @@ public class Unit : MonoBehaviour
     public bool IsDead() => healthSystem.GetHealth() == 0;
 
     public string GetName() => gameObject.ToString();
+
+    public bool HasKeys() => keys > 0;
+
+    public void SetKeys(int keys)
+    {
+        this.keys = keys;
+    }
+
+    public int GetKeys() => keys;
+
+    public bool HasResourcesForAction(BaseAction action)
+    {
+        if (action.HasResourceCost())
+        {
+            return keys > action.GetKeyCost();
+        }
+        return true;
+    }
+
+    public bool IsAwake() => isAwake;
+
+    public void SetIsAwake(bool isAwake)
+    {
+        this.isAwake = isAwake;
+    }
 }

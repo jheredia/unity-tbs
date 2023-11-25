@@ -193,6 +193,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grenadeExplosionVFXPrefab: {fileID: 8725875529586424851, guid: 7a70febed24e0458d98baa194e7fe578,
     type: 3}
+  grenadeSmokeVFXPrefab: {fileID: 8725875529586424851, guid: efbec7e932908434e9365d9753048b85,
+    type: 3}
   trailRenderer: {fileID: 1136614767312202913}
   arcYAnimationCurve:
     serializedVersion: 2

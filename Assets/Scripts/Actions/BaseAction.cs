@@ -26,6 +26,10 @@ public abstract class BaseAction : MonoBehaviour
     [SerializeField] private bool hasCharges = false;
     [SerializeField, Min(0)] private int actionCharges = 1;
 
+    [Header("Resources cost")]
+    [SerializeField] private bool hasResourceCost = false;
+    [SerializeField] private int keyCost;
+
     protected virtual void Awake()
     {
         unit = GetComponent<Unit>();
@@ -102,4 +106,8 @@ public abstract class BaseAction : MonoBehaviour
         }
         return true;
     }
+
+    public virtual bool HasResourceCost() => hasResourceCost;
+
+    public virtual int GetKeyCost() => keyCost;
 }
