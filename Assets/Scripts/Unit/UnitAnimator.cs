@@ -7,6 +7,8 @@ using UnityEngine;
 public class UnitAnimator : MonoBehaviour
 {
     const string IS_WALKING_PARAM = "IsWalking";
+    const string SHOOT_TRIGGER = "Shoot";
+    const string MELEE_SWORD_TRIGGER = "Melee Sword";
 
     [SerializeField] private Animator unitAnimator;
     [SerializeField] private Transform bulletProjectilePrefab;
@@ -24,6 +26,11 @@ public class UnitAnimator : MonoBehaviour
         if (TryGetComponent(out AttackAction attackAction))
         {
             attackAction.OnAttack += AttackAction_OnAttack;
+        }
+        if (TryGetComponent(out MeleeAction meleeAction))
+        {
+            meleeAction.OnSwordActionStarted += MeleeAction_OnSwordActionStarted;
+            meleeAction.OnSwordActionCompleted += MeleeAction_OnSwordActionCompleted;
         }
     }
 
@@ -51,7 +58,7 @@ public class UnitAnimator : MonoBehaviour
 
     private void AttackAction_OnAttack(object sender, AttackAction.OnAttackEventArgs e)
     {
-        unitAnimator.SetTrigger("Shoot");
+        unitAnimator.SetTrigger(SHOOT_TRIGGER);
         Transform bulletProjectileTransform = Instantiate(bulletProjectilePrefab, shootPointTransform.position, Quaternion.identity);
         if (bulletProjectileTransform.TryGetComponent(out BulletProjectile bulletProjectile))
         {
@@ -60,5 +67,14 @@ public class UnitAnimator : MonoBehaviour
             targetUnitShootAtPosition.y = shootPointTransform.position.y;
             bulletProjectile.Setup(targetUnitShootAtPosition);
         }
+    }
+
+    private void MeleeAction_OnSwordActionStarted(object sender, EventArgs e)
+    {
+        unitAnimator.SetTrigger(MELEE_SWORD_TRIGGER);
+    }
+
+    private void MeleeAction_OnSwordActionCompleted(object sender, EventArgs e)
+    {
     }
 }

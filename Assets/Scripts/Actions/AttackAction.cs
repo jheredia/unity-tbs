@@ -23,11 +23,14 @@ public class AttackAction : BaseAction
 
     public event EventHandler<OnAttackEventArgs> OnAttack;
 
+    public static event EventHandler<OnAttackEventArgs> OnAnyAttack;
+
     public class OnAttackEventArgs : EventArgs
     {
         public Unit targetUnit;
         public Unit attackingUnit;
         public int damageDealt;
+        public bool triggerActionCamera;
     }
 
     public override string GetActionName()
@@ -76,8 +79,6 @@ public class AttackAction : BaseAction
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
         targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
-
-        //Debug.Log(targetUnit);
         state = State.Aiming;
         float aimingStateTime = 1f;
         stateTimer = aimingStateTime;
@@ -150,12 +151,28 @@ public class AttackAction : BaseAction
     private void Shoot()
     {
         int damageDealt = UnityEngine.Random.Range(30, 51);
-        OnAttack?.Invoke(this, new OnAttackEventArgs
+
+        float critChance = 10f;
+        bool triggerActionCamera = false;
+        if (UnityEngine.Random.Range(0, 101) <= critChance)
+        {
+            triggerActionCamera = true;
+            damageDealt = Mathf.RoundToInt(damageDealt * 1.10f);
+        }
+        if (damageDealt >= 50)
+        {
+            triggerActionCamera = true;
+        }
+        OnAttackEventArgs eventArgs = new()
         {
             targetUnit = targetUnit,
             attackingUnit = unit,
             damageDealt = damageDealt,
-        });
+            triggerActionCamera = triggerActionCamera
+        };
+        OnAttack?.Invoke(this, eventArgs);
+        OnAnyAttack?.Invoke(this, eventArgs);
+
         targetUnit.Damage(damageDealt);
     }
 

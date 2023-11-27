@@ -20,7 +20,15 @@ public abstract class BaseAction : MonoBehaviour
     // [SerializeField] private Color color = Color.white;
     [SerializeField] GridSystemVisual.GridVisualType gridVisualType;
     [SerializeField] GridSystemVisual.GridVisualType rangeGridVisualType;
-    [SerializeField] private int actionPointsCost = 1;
+
+    [Header("Action cost and charges")]
+    [SerializeField, Min(0)] private int actionPointsCost = 1;
+    [SerializeField] private bool hasCharges = false;
+    [SerializeField, Min(0)] private int actionCharges = 1;
+
+    [Header("Resources cost")]
+    [SerializeField] private bool hasResourceCost = false;
+    [SerializeField] private int keyCost;
 
     protected virtual void Awake()
     {
@@ -48,8 +56,8 @@ public abstract class BaseAction : MonoBehaviour
 
     protected virtual void ActionStart(Action onActionComplete)
     {
-        this.onActionComplete = onActionComplete;
         isActive = true;
+        this.onActionComplete = onActionComplete;
         OnAnyActionStarted?.Invoke(this, EventArgs.Empty);
     }
 
@@ -62,7 +70,7 @@ public abstract class BaseAction : MonoBehaviour
 
     public Unit GetUnit() => unit;
 
-    public int GetActionRange() => actionRange;
+    public virtual int GetActionRange() => actionRange;
 
     public bool GetShowRange() => showRange;
     public EnemyAIAction GetBestEnemyAIAction()
@@ -82,4 +90,24 @@ public abstract class BaseAction : MonoBehaviour
     }
 
     public abstract EnemyAIAction GetEnemyAIAction(GridPosition gridPosition);
+
+    public bool HasCharges() => hasCharges;
+
+    public int GetAvailableCharges() => actionCharges;
+
+    public void SetAvailableCharges(int actionCharges) => this.actionCharges = actionCharges;
+
+    // Check if the action is one limited by charges and if it has charges available
+    public virtual bool HasChargesAvailable()
+    {
+        if (hasCharges)
+        {
+            return actionCharges > 0;
+        }
+        return true;
+    }
+
+    public virtual bool HasResourceCost() => hasResourceCost;
+
+    public virtual int GetKeyCost() => keyCost;
 }

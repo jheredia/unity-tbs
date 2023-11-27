@@ -61,10 +61,13 @@ public class GridSystemVisual : MonoBehaviour
         levelGrid.OnAnyUnitMovedGridPosition += LevelGrid_OnAnyUnitMovedGridPosition;
         Unit.OnAnyUnitDied += Unit_OnAnyUnitDied;
         Unit.OnAnyUnitSpawned += Unit_OnAnyUnitSpawned;
+        DestructibleCrate.OnAnyDestroyed += DestructibleCrate_OnAnyCrateDestroyed;
+        Barrel.OnAnyDestroyed += Barrel_OnAnyDestroyed;
         UpdateGridVisual();
     }
 
-    public void HideAllGridPositions()
+
+    private void HideAllGridPositions()
     {
         foreach (GridSystemVisualSingle gridSystemVisualSingle in gridSystemVisualSingleArray)
         {
@@ -72,7 +75,7 @@ public class GridSystemVisual : MonoBehaviour
         }
     }
 
-    public void ShowGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
+    private void ShowGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
     {
         foreach (GridPosition gridPosition in gridPositionList)
         {
@@ -81,7 +84,7 @@ public class GridSystemVisual : MonoBehaviour
         }
     }
 
-    public void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
+    private void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
     {
 
 
@@ -101,10 +104,29 @@ public class GridSystemVisual : MonoBehaviour
 
     }
 
+    private void ShowGridPositionRangeSquare(GridPosition gridPosition, int range, GridVisualType gridVisualType)
+    {
+
+
+        List<GridPosition> gridPositionList = new List<GridPosition>();
+        for (int x = -range; x <= range; x++)
+        {
+            for (int z = -range; z <= range; z++)
+            {
+                GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
+                gridPositionList.Add(testGridPosition);
+            }
+        }
+        ShowGridPositionList(gridPositionList, gridVisualType);
+
+    }
+
     private void UpdateGridVisual()
     {
         HideAllGridPositions();
         Unit selectedUnit = UnitActionSystem.Instance.GetSelectedUnit();
+        if (selectedUnit == null) return;
         BaseAction selectedAction = UnitActionSystem.Instance.GetSelectedAction();
         GridVisualType gridVisualType = GridVisualType.White;
         switch (selectedAction)
@@ -124,13 +146,29 @@ public class GridSystemVisual : MonoBehaviour
                     );
                 }
                 break;
+            case MeleeAction meleeAction:
+                gridVisualType = GridVisualType.Red;
+                if (meleeAction.GetShowRange())
+                {
+                    ShowGridPositionRangeSquare(
+                        selectedUnit.GetGridPosition(),
+                        meleeAction.GetActionRange(),
+                        GridVisualType.SoftRed
+                    );
+                }
+                break;
+            case GrenadeAction grenadeAction:
+                gridVisualType = GridVisualType.Yellow;
+                break;
             case SpinAction spinAction:
                 gridVisualType = GridVisualType.Green;
                 break;
             case CrouchAction crouchAction:
                 gridVisualType = GridVisualType.Yellow;
                 break;
-
+            case InteractAction interactAction:
+                gridVisualType = GridVisualType.Green;
+                break;
         }
         // ShowGridPositionRange(
         //     selectedUnit.GetGridPosition(),
@@ -161,6 +199,17 @@ public class GridSystemVisual : MonoBehaviour
     {
         UpdateGridVisual();
     }
+
+    private void DestructibleCrate_OnAnyCrateDestroyed(object sender, EventArgs e)
+    {
+        UpdateGridVisual();
+    }
+
+    private void Barrel_OnAnyDestroyed(object sender, EventArgs e)
+    {
+        UpdateGridVisual();
+    }
+
     private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType)
     {
         foreach (GridVisualTypeMaterial gridVisualTypeMaterial in gridVisualTypeMaterialList)

@@ -22,12 +22,20 @@ public class UnitRagdoll : MonoBehaviour
 
     public void Setup(Transform originalRootBone)
     {
-        MatchAllChildTransforms(originalRootBone, ragdollRootBone);
-        ApplyExplosionToRagdoll(ragdollRootBone, explosionForce, transform.position, explosionRange);
+        Setup(originalRootBone, transform.position);
     }
+
+    public void Setup(Transform originalRootBone, Vector3 ragdollExplosionPosition)
+    {
+        MatchAllChildTransforms(originalRootBone, ragdollRootBone);
+        Vector3 randomDirection = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+        ApplyExplosionToRagdoll(ragdollRootBone, explosionForce, ragdollExplosionPosition + randomDirection, explosionRange);
+    }
+
 
     private void MatchAllChildTransforms(Transform root, Transform clone)
     {
+        if (clone == null) return; // This is needed for childs that destroy themselves like trails
         foreach (Transform child in root)
         {
             Transform cloneChild = clone.Find(child.name);

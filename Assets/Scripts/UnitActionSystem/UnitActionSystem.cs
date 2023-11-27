@@ -32,7 +32,18 @@ public class UnitActionSystem : MonoBehaviour
 
     private void Start()
     {
+        Unit.OnAnyUnitDied += Unit_OnAnyUnitDied;
         SetSelectedUnit(selectedUnit);
+    }
+
+    private void Unit_OnAnyUnitDied(object sender, EventArgs e)
+    {
+        // The selected unit died
+        if (selectedUnit == sender as Unit)
+        {
+            SetSelectedUnit(null);
+            SetSelectedAction(null);
+        }
     }
 
     /// <summary>
@@ -46,24 +57,20 @@ public class UnitActionSystem : MonoBehaviour
         if (TryHandleUnitSelection()) return;
         if (!TurnSystem.Instance.IsPlayerTurn()) return;
         HandleSelectedAction();
-        GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
-
-        if (Input.GetKeyUp(KeyCode.C))
-        {
-            CrouchAction unitCrouchAction = selectedUnit.GetAction<CrouchAction>();
-            SetBusy();
-            unitCrouchAction.TakeAction(mouseGridPosition, ClearBusy);
-        }
         HandleMovementSpeedInteractions();
     }
 
     private void HandleSelectedAction()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (InputManager.Instance.IsLeftMouseButtonDownThisFrame())
         {
             Vector3 mousePosition = MouseWorld.GetPosition();
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(mousePosition);
+            // If it's not a valid grid position
             if (!selectedAction.IsValidActionGridPosition(mouseGridPosition)) return;
+            // If this action uses charges and doesn't have any available
+            if (!selectedAction.HasChargesAvailable()) return;
+            // If selected unit doesn't have enough action points
             if (!selectedUnit.TrySpendActionPointsOnAction(selectedAction)) return;
             SetBusy();
             selectedAction.TakeAction(mouseGridPosition, ClearBusy);
@@ -90,9 +97,10 @@ public class UnitActionSystem : MonoBehaviour
     /// <returns>True if an Unit component was hit and it's not the same one; False otherwise</returns>
     private bool TryHandleUnitSelection()
     {
-        if (Input.GetMouseButtonDown(0))
+        InputManager inputManagerInstance = InputManager.Instance;
+        if (inputManagerInstance.IsLeftMouseButtonDownThisFrame())
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(inputManagerInstance.GetMouseScreenPosition());
             if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, unitsLayerMask))
             {
                 if (raycastHit.transform.TryGetComponent(out Unit unit) && unit != selectedUnit)
@@ -111,20 +119,22 @@ public class UnitActionSystem : MonoBehaviour
     /// </summary>
     private void HandleMovementSpeedInteractions()
     {
+        InputManager inputManagerInstance = InputManager.Instance;
+
         //Slow player (10%)
-        if (Input.GetKeyUp(KeyCode.DownArrow))
+        if (inputManagerInstance.GetKeyUp(KeyCode.DownArrow))
         {
             selectedUnit.GetAction<MoveAction>().SetMovementBuff(.9f);
         }
 
         // Speed up player (10%)
-        if (Input.GetKeyUp(KeyCode.UpArrow))
+        if (inputManagerInstance.GetKeyUp(KeyCode.UpArrow))
         {
             selectedUnit.GetAction<MoveAction>().SetMovementBuff(1.1f);
         }
 
         // Reset the speed of the player to base speed
-        if (Input.GetKeyUp(KeyCode.R))
+        if (inputManagerInstance.GetKeyUp(KeyCode.R))
         {
             selectedUnit.GetAction<MoveAction>().SetMovementSpeed(selectedUnit.GetAction<MoveAction>().GetBaseMovementSpeed());
         }
@@ -136,7 +146,8 @@ public class UnitActionSystem : MonoBehaviour
     private void SetSelectedUnit(Unit unit)
     {
         selectedUnit = unit;
-        SetSelectedAction(unit.GetAction<MoveAction>());
+        if (unit != null)
+            SetSelectedAction(unit.GetAction<MoveAction>());
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -151,7 +162,7 @@ public class UnitActionSystem : MonoBehaviour
 
     public void SetSelectedAction(BaseAction action)
     {
-        this.selectedAction = action;
+        selectedAction = action;
         OnSelectedActionChanged?.Invoke(this, EventArgs.Empty);
     }
     public BaseAction GetSelectedAction() => this.selectedAction;
