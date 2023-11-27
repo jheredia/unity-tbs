@@ -35,6 +35,7 @@ public class UnitActionSystemUI : MonoBehaviour
     {
         ClearUnitActionButtons();
         Unit selectedUnit = UnitActionSystem.Instance.GetSelectedUnit();
+        if (selectedUnit == null) return;
         BaseAction[] selectedUnitActions = selectedUnit.GetUnitActions();
         foreach (BaseAction action in selectedUnitActions)
         {
@@ -82,7 +83,7 @@ public class UnitActionSystemUI : MonoBehaviour
     private void UpdateActionPointsCost()
     {
         BaseAction selectedBaseAction = UnitActionSystem.Instance.GetSelectedAction();
-        actionPointsCostText.text = $"Action Cost: {selectedBaseAction.GetActionPointsCost()}";
+        if (selectedBaseAction != null) actionPointsCostText.text = $"Action Cost: {selectedBaseAction.GetActionPointsCost()}";
     }
 
 }

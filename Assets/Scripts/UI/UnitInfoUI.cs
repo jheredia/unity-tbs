@@ -25,6 +25,6 @@ public class UnitInfoUI : MonoBehaviour
 
     private void UpdateUIElements()
     {
-        unitName.text = unit.name;
+        if (unit != null) unitName.text = unit.name;
     }
 }

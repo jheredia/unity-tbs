@@ -54,16 +54,17 @@ public class Barrel : MonoBehaviour, IInteractable
         this.onInteractionComplete = onInteractionComplete;
         isActive = true;
         timer = .5f;
-
+        Unit interactingUnit = UnitActionSystem.Instance.GetSelectedUnit();
         if (keyLoot > 0)
         {
-            int unitKeyCount = UnitActionSystem.Instance.GetSelectedUnit().GetKeys();
-            UnitActionSystem.Instance.GetSelectedUnit().SetKeys(unitKeyCount + keyLoot);
+            int unitKeyCount = interactingUnit.GetKeys();
+            interactingUnit.SetKeys(unitKeyCount + keyLoot);
         }
         if (grenadeLoot > 0)
         {
-            int unitGrenadeCount = UnitActionSystem.Instance.GetSelectedUnit().GetAction<GrenadeAction>().GetAvailableCharges();
-            UnitActionSystem.Instance.GetSelectedUnit().GetAction<GrenadeAction>().SetAvailableCharges(unitGrenadeCount + grenadeLoot);
+            // TODO: Refactor this in a proper inventory system
+            int unitGrenadeCount = interactingUnit.GetAction<GrenadeAction>().GetAvailableCharges();
+            interactingUnit.GetAction<GrenadeAction>().SetAvailableCharges(unitGrenadeCount + grenadeLoot);
         }
         Transform crateDestroyedTransform = Instantiate(barrelDestroyedPrefab, transform.position, transform.rotation);
         float explosionForce = 150f;

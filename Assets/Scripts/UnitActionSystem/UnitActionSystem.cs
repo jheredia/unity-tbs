@@ -32,7 +32,18 @@ public class UnitActionSystem : MonoBehaviour
 
     private void Start()
     {
+        Unit.OnAnyUnitDied += Unit_OnAnyUnitDied;
         SetSelectedUnit(selectedUnit);
+    }
+
+    private void Unit_OnAnyUnitDied(object sender, EventArgs e)
+    {
+        // The selected unit died
+        if (selectedUnit == sender as Unit)
+        {
+            SetSelectedUnit(null);
+            SetSelectedAction(null);
+        }
     }
 
     /// <summary>
@@ -135,7 +146,8 @@ public class UnitActionSystem : MonoBehaviour
     private void SetSelectedUnit(Unit unit)
     {
         selectedUnit = unit;
-        SetSelectedAction(unit.GetAction<MoveAction>());
+        if (unit != null)
+            SetSelectedAction(unit.GetAction<MoveAction>());
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -150,7 +162,7 @@ public class UnitActionSystem : MonoBehaviour
 
     public void SetSelectedAction(BaseAction action)
     {
-        this.selectedAction = action;
+        selectedAction = action;
         OnSelectedActionChanged?.Invoke(this, EventArgs.Empty);
     }
     public BaseAction GetSelectedAction() => this.selectedAction;
