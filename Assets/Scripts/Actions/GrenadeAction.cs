@@ -138,4 +138,6 @@ public class GrenadeAction : BaseAction
                 break;
         }
     }
+
+    public GridPosition GetTargetGridPosition() => targetPosition;
 }
