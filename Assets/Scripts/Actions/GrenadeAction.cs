@@ -5,9 +5,20 @@ using UnityEngine;
 
 public class GrenadeAction : BaseAction
 {
+    private enum State
+    {
+        Aiming,
+        Throwing,
+        Cooloff,
+    }
+    private State state;
+    private float stateTimer;
+
     [SerializeField] private LayerMask obstaclesLayerMask;
     [SerializeField] private Transform grenadeProjectilePrefab;
     public static event EventHandler OnAnyGrenadeLaunched;
+    private float rotateSpeed = 10f;
+    private GridPosition targetPosition;
 
 
     public override string GetActionName()
@@ -17,24 +28,28 @@ public class GrenadeAction : BaseAction
 
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
     {
+
         int totalActionWeight = 0;
-        // Vector3 targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
-        // float damageRadius = 4f;
-        // Collider[] colliderArray = Physics.OverlapSphere(targetPosition, damageRadius);
-        // foreach (Collider collider in colliderArray)
-        // {
-        //     if (collider.TryGetComponent<Unit>(out Unit unit))
-        //     {
-        //         if (unit.IsEnemy())
-        //         {
-        //             totalActionWeight -= 25;
-        //         }
-        //         if (!unit.IsEnemy())
-        //         {
-        //             totalActionWeight += 100;
-        //         }
-        //     }
-        // }
+        if (GetAvailableCharges() != 0)
+        {
+            Vector3 targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+            float damageRadius = 4f;
+            Collider[] colliderArray = Physics.OverlapSphere(targetPosition, damageRadius);
+            foreach (Collider collider in colliderArray)
+            {
+                if (collider.TryGetComponent<Unit>(out Unit unit))
+                {
+                    if (unit.IsEnemy())
+                    {
+                        totalActionWeight -= 25;
+                    }
+                    if (!unit.IsEnemy())
+                    {
+                        totalActionWeight += 25;
+                    }
+                }
+            }
+        }
         return new EnemyAIAction(gridPosition, totalActionWeight);
     }
 
@@ -70,10 +85,10 @@ public class GrenadeAction : BaseAction
 
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
-
-        Transform grenadeProjectileTransform = Instantiate(grenadeProjectilePrefab, unit.GetWorldPosition(), Quaternion.identity);
-        grenadeProjectileTransform.GetComponent<GrenadeProjectile>().Setup(gridPosition, OnGrenadeBehaviourComplete);
-        OnAnyGrenadeLaunched?.Invoke(this, EventArgs.Empty);
+        state = State.Aiming;
+        float aimingStateTime = .3f;
+        stateTimer = aimingStateTime;
+        targetPosition = gridPosition;
         ActionStart(onActionComplete);
     }
 
@@ -81,11 +96,46 @@ public class GrenadeAction : BaseAction
     {
         if (!isActive) return;
 
+
+        stateTimer -= Time.deltaTime;
+
+        switch (state)
+        {
+            case State.Aiming:
+                Vector3 aimDirection = (LevelGrid.Instance.GetWorldPosition(targetPosition) - unit.GetWorldPosition()).normalized;
+                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
+                break;
+        }
+        if (stateTimer <= 0f)
+        {
+            NextState();
+        }
     }
 
     private void OnGrenadeBehaviourComplete()
     {
         SetAvailableCharges(GetAvailableCharges() - 1);
         ActionComplete();
+    }
+    private void NextState()
+    {
+        switch (state)
+        {
+            case State.Aiming:
+                state = State.Throwing;
+                float throwingStateTime = .1f;
+                stateTimer = throwingStateTime;
+                break;
+            case State.Throwing:
+                Transform grenadeProjectileTransform = Instantiate(grenadeProjectilePrefab, unit.GetWorldPosition(), Quaternion.identity);
+                grenadeProjectileTransform.GetComponent<GrenadeProjectile>().Setup(targetPosition, OnGrenadeBehaviourComplete);
+                OnAnyGrenadeLaunched?.Invoke(this, EventArgs.Empty);
+                state = State.Cooloff;
+                float cooloffStateTime = .1f;
+                stateTimer = cooloffStateTime;
+                break;
+            case State.Cooloff:
+                break;
+        }
     }
 }
