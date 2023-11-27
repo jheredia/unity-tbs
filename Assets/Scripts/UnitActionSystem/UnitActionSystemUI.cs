@@ -83,7 +83,7 @@ public class UnitActionSystemUI : MonoBehaviour
     private void UpdateActionPointsCost()
     {
         BaseAction selectedBaseAction = UnitActionSystem.Instance.GetSelectedAction();
-        if (selectedBaseAction != null) actionPointsCostText.text = $"Action Cost: {selectedBaseAction.GetActionPointsCost()}";
+        actionPointsCostText.text = (selectedBaseAction != null) ? $"Action Cost: {selectedBaseAction.GetActionPointsCost()}" : "";
     }
 
 }

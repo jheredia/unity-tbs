@@ -14,18 +14,15 @@ public class CameraManager : MonoBehaviour
     {
         BaseAction.OnAnyActionStarted += BaseAction_OnAnyActionStarted;
         BaseAction.OnAnyActionCompleted += BaseAction_OnAnyActionCompleted;
-        HideActionCamera();
+
+        ShowActionCamera(false);
     }
 
 
-    private void ShowActionCamera()
+    private void ShowActionCamera(bool show = true)
     {
-        actionCameraGameObject.SetActive(true);
-    }
-
-    private void HideActionCamera()
-    {
-        actionCameraGameObject.SetActive(false);
+        if (actionCameraGameObject == null) return;
+        actionCameraGameObject.SetActive(show);
     }
 
     private void BaseAction_OnAnyActionStarted(object sender, EventArgs e)
@@ -55,21 +52,25 @@ public class CameraManager : MonoBehaviour
 
     private void PositionActionCamera(Unit attackingUnit, Unit targetUnit)
     {
+        if (actionCameraGameObject == null) return;
         Vector3 cameraCharacterHeight = Vector3.up * 1.7f;
         Vector3 attackDirection = (targetUnit.GetWorldPosition() - attackingUnit.GetWorldPosition()).normalized;
-
         float shoulderOffsetAmount = 0.5f;
         Vector3 shoulderOffset = Quaternion.Euler(0, 90, 0) * attackDirection * shoulderOffsetAmount;
-
         Vector3 actionCameraPosition =
             attackingUnit.GetWorldPosition() +
             cameraCharacterHeight +
             shoulderOffset +
             (attackDirection * -1);
-
         actionCameraGameObject.transform.position = actionCameraPosition;
         actionCameraGameObject.transform.LookAt(targetUnit.GetWorldPosition() + cameraCharacterHeight);
-        overlayUICanvas.SetActive(false);
+        ShowGameUI(false);
+    }
+
+    private void ShowGameUI(bool show = true)
+    {
+        if (overlayUICanvas == null) return;
+        overlayUICanvas.SetActive(show);
     }
 
     private void BaseAction_OnAnyActionCompleted(object sender, EventArgs e)
@@ -77,12 +78,12 @@ public class CameraManager : MonoBehaviour
         switch (sender)
         {
             case AttackAction:
-                overlayUICanvas.SetActive(true);
-                HideActionCamera();
+                ShowGameUI();
+                ShowActionCamera(false);
                 break;
             case MeleeAction:
-                overlayUICanvas.SetActive(true);
-                HideActionCamera();
+                ShowGameUI();
+                ShowActionCamera(false);
                 break;
         }
     }

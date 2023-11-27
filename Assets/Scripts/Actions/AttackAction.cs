@@ -170,7 +170,6 @@ public class AttackAction : BaseAction
             damageDealt = damageDealt,
             triggerActionCamera = triggerActionCamera
         };
-        Debug.Log(eventArgs);
         OnAttack?.Invoke(this, eventArgs);
         OnAnyAttack?.Invoke(this, eventArgs);
 

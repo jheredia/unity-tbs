@@ -52,15 +52,15 @@ public class GrenadeAction : BaseAction
                 if (!levelGrid.IsValidGridPosition(testGridPosition)) { continue; }// Not a valid grid position
                 int testDistance = Mathf.Abs(x) + Mathf.Abs(z); // Get the radius
                 if (testDistance > actionRange) { continue; }// Outside of attack rangei
-                // Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
-                // Vector3 shootDirection = (LevelGrid.Instance.GetWorldPosition(testGridPosition) - unitWorldPosition).normalized;
-                // float unitShoulderHeight = 1.7f;
-                // if (Physics.Raycast(
-                //     unitWorldPosition + Vector3.up * unitShoulderHeight,
-                //     shootDirection,
-                //     Vector3.Distance(unitWorldPosition, LevelGrid.Instance.GetWorldPosition(testGridPosition)),
-                //     obstaclesLayerMask
-                // )) continue; // Blocked by an obstacle
+                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
+                Vector3 shootDirection = (LevelGrid.Instance.GetWorldPosition(testGridPosition) - unitWorldPosition).normalized;
+                float unitShoulderHeight = 1.7f;
+                if (Physics.Raycast(
+                    unitWorldPosition + Vector3.up * unitShoulderHeight,
+                    shootDirection,
+                    Vector3.Distance(unitWorldPosition, LevelGrid.Instance.GetWorldPosition(testGridPosition)),
+                    obstaclesLayerMask
+                )) continue; // Blocked by an obstacle
 
                 validGridPositionList.Add(testGridPosition); // Add the grid position of the enemy
             }

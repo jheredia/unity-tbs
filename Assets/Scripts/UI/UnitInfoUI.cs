@@ -20,11 +20,12 @@ public class UnitInfoUI : MonoBehaviour
 
     private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs e)
     {
+        unit = UnitActionSystem.Instance.GetSelectedUnit();
         UpdateUIElements();
     }
 
     private void UpdateUIElements()
     {
-        if (unit != null) unitName.text = unit.name;
+        unitName.text = (unit != null) ? unit.name : "";
     }
 }
