@@ -8,14 +8,13 @@ public class Pathfinding : MonoBehaviour
     public static Pathfinding Instance { get; private set; }
 
     private const int MOVE_STRAIGHT_COST = 10;
-    private const int MOVE_DIAGONALLY_COST = 14;
 
     [SerializeField] private Transform gridDebugObjectPrefab;
     [SerializeField] private LayerMask obstaclesLayer;
     private int width;
     private int height;
     private float cellSize;
-    private GridSystem<PathNode> gridSystem;
+    private GridSystemHex<PathNode> gridSystem;
 
 
     private void Awake()
@@ -34,11 +33,11 @@ public class Pathfinding : MonoBehaviour
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
-        gridSystem = new GridSystem<PathNode>(
+        gridSystem = new GridSystemHex<PathNode>(
            width,
            height,
            cellSize,
-           (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition)
+           (GridSystemHex<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition)
        );
         //gridSystem.CreateDebugObjects(gridDebugObjectPrefab);
 
@@ -90,7 +89,7 @@ public class Pathfinding : MonoBehaviour
         // Since we test the starting node, the cost to go from the starting node to the starting node is 0
         startNode.SetGCost(0);
         // Set the heuristic, a guess of how close this grid position is to the end grid position
-        startNode.SetHCost(CalculateDistance(startGridPosition, endGridPosition));
+        startNode.SetHCost(CalculateHeuristicDistance(startGridPosition, endGridPosition));
         startNode.CalculateFCost();
 
         while (openList.Count > 0)
@@ -116,12 +115,12 @@ public class Pathfinding : MonoBehaviour
                     closedList.Add(neighbourNode);
                     continue;
                 }
-                int tentativeGCost = currentNode.GetGCost() + CalculateDistance(currentNode.GetGridPosition(), neighbourNode.GetGridPosition());
+                int tentativeGCost = currentNode.GetGCost() + MOVE_STRAIGHT_COST;
                 if (tentativeGCost < neighbourNode.GetGCost())
                 {
                     neighbourNode.SetPreviousNode(currentNode);
                     neighbourNode.SetGCost(tentativeGCost);
-                    neighbourNode.SetHCost(CalculateDistance(neighbourNode.GetGridPosition(), endGridPosition));
+                    neighbourNode.SetHCost(CalculateHeuristicDistance(neighbourNode.GetGridPosition(), endGridPosition));
                     neighbourNode.CalculateFCost();
                     if (!openList.Contains(neighbourNode))
                     {
@@ -135,13 +134,9 @@ public class Pathfinding : MonoBehaviour
         return null;
     }
 
-    public int CalculateDistance(GridPosition gridPositionA, GridPosition gridPositionB)
+    public int CalculateHeuristicDistance(GridPosition gridPositionA, GridPosition gridPositionB)
     {
-        GridPosition gridPositionDistance = gridPositionA - gridPositionB;
-        int xDistance = Mathf.Abs(gridPositionDistance.x);
-        int zDistance = Mathf.Abs(gridPositionDistance.z);
-        int remainingDistance = Mathf.Abs(xDistance - zDistance);
-        return MOVE_DIAGONALLY_COST * Mathf.Min(xDistance, zDistance) + MOVE_STRAIGHT_COST * remainingDistance;
+        return Mathf.RoundToInt(MOVE_STRAIGHT_COST * Vector3.Distance(gridSystem.GetWorldPosition(gridPositionA), gridSystem.GetWorldPosition(gridPositionB)));
     }
 
     private PathNode GetLowestFCostPathNode(List<PathNode> pathNodeList)
@@ -167,49 +162,45 @@ public class Pathfinding : MonoBehaviour
 
         GridPosition gridPosition = currentNode.GetGridPosition();
 
+        bool oddRow = gridPosition.z % 2 == 1;
         if (gridPosition.x - 1 >= 0)
         {
-            // Left neighbour node
             neighbourList.Add(GetNode(gridPosition.x - 1, gridPosition.z));
-            if (gridPosition.z - 1 >= 0)
+            if (!oddRow)
             {
-                // Left Down
-                neighbourList.Add(GetNode(gridPosition.x - 1, gridPosition.z - 1));
-            }
-            if (gridPosition.z + 1 < gridSystem.GetHeight())
-            {
-                // Left Up
-                neighbourList.Add(GetNode(gridPosition.x - 1, gridPosition.z + 1));
+                if (gridPosition.z - 1 >= 0)
+                {
+                    neighbourList.Add(GetNode(gridPosition.x - 1, gridPosition.z - 1));
+                }
+                if (gridPosition.z + 1 < gridSystem.GetHeight())
+                {
+                    neighbourList.Add(GetNode(gridPosition.x - 1, gridPosition.z + 1));
+                }
             }
         }
-
         if (gridPosition.x + 1 < gridSystem.GetWidth())
         {
-            // Right
             neighbourList.Add(GetNode(gridPosition.x + 1, gridPosition.z));
-            if (gridPosition.z - 1 >= 0)
+            if (oddRow)
             {
-                // Right Down 
-                neighbourList.Add(GetNode(gridPosition.x + 1, gridPosition.z - 1));
-            }
-            if (gridPosition.z + 1 < gridSystem.GetHeight())
-            {
-                // Right Up 
-                neighbourList.Add(GetNode(gridPosition.x + 1, gridPosition.z + 1));
+                if (gridPosition.z - 1 >= 0)
+                {
+                    neighbourList.Add(GetNode(gridPosition.x + 1, gridPosition.z - 1));
+                }
+                if (gridPosition.z + 1 < gridSystem.GetHeight())
+                {
+                    neighbourList.Add(GetNode(gridPosition.x + 1, gridPosition.z + 1));
+                }
             }
         }
         if (gridPosition.z - 1 >= 0)
         {
-            // Down
             neighbourList.Add(GetNode(gridPosition.x, gridPosition.z - 1));
         }
         if (gridPosition.z + 1 < gridSystem.GetHeight())
         {
-            // Up
             neighbourList.Add(GetNode(gridPosition.x, gridPosition.z + 1));
         }
-
-
         return neighbourList;
     }
 

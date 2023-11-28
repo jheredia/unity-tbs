@@ -6,11 +6,11 @@ public class GridObject
 {
 
     private GridPosition gridPosition;
-    private GridSystem<GridObject> gridSystem;
+    private GridSystemHex<GridObject> gridSystem;
     private List<Unit> unitList;
     private IInteractable interactable;
 
-    public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridPosition)
+    public GridObject(GridSystemHex<GridObject> gridSystem, GridPosition gridPosition)
     {
         this.gridPosition = gridPosition;
         this.gridSystem = gridSystem;

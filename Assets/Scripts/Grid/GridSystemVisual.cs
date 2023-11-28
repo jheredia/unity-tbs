@@ -29,6 +29,7 @@ public class GridSystemVisual : MonoBehaviour
     [SerializeField] private Transform gridSystemVisualSinglePrefab;
 
     private GridSystemVisualSingle[,] gridSystemVisualSingleArray;
+    private GridSystemVisualSingle lastSelectedGridSystemVisualSingle;
 
     private void Awake()
     {
@@ -64,6 +65,17 @@ public class GridSystemVisual : MonoBehaviour
         DestructibleCrate.OnAnyDestroyed += DestructibleCrate_OnAnyCrateDestroyed;
         Barrel.OnAnyDestroyed += Barrel_OnAnyDestroyed;
         UpdateGridVisual();
+    }
+
+    private void Update()
+    {
+        lastSelectedGridSystemVisualSingle?.ShowSelected(false);
+        Vector3 mouseWorldPosition = MouseWorld.GetPosition();
+        GridPosition gridPosition = LevelGrid.Instance.GetGridPosition(mouseWorldPosition);
+        if (LevelGrid.Instance.IsValidGridPosition(gridPosition))
+            lastSelectedGridSystemVisualSingle = gridSystemVisualSingleArray[gridPosition.x, gridPosition.z];
+
+        lastSelectedGridSystemVisualSingle?.ShowSelected();
     }
 
 
