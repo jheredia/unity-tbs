@@ -29,6 +29,7 @@ public class GridSystemVisual : MonoBehaviour
     [SerializeField] private Transform gridSystemVisualSinglePrefab;
 
     private GridSystemVisualSingle[,] gridSystemVisualSingleArray;
+    private GridSystemVisualSingle lastSelectedGridSystemVisualSingle;
 
     private void Awake()
     {
@@ -64,14 +65,17 @@ public class GridSystemVisual : MonoBehaviour
         DestructibleCrate.OnAnyDestroyed += DestructibleCrate_OnAnyCrateDestroyed;
         Barrel.OnAnyDestroyed += Barrel_OnAnyDestroyed;
         UpdateGridVisual();
+    }
 
-        for (int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
-        {
-            for (int z = 0; z < LevelGrid.Instance.GetHeight(); z++)
-            {
-                gridSystemVisualSingleArray[x, z].Show(GetGridVisualTypeMaterial(GridVisualType.White));
-            }
-        }
+    private void Update()
+    {
+        lastSelectedGridSystemVisualSingle?.ShowSelected(false);
+        Vector3 mouseWorldPosition = MouseWorld.GetPosition();
+        GridPosition gridPosition = LevelGrid.Instance.GetGridPosition(mouseWorldPosition);
+        if (LevelGrid.Instance.IsValidGridPosition(gridPosition))
+            lastSelectedGridSystemVisualSingle = gridSystemVisualSingleArray[gridPosition.x, gridPosition.z];
+
+        lastSelectedGridSystemVisualSingle?.ShowSelected();
     }
 
 
@@ -132,7 +136,7 @@ public class GridSystemVisual : MonoBehaviour
 
     private void UpdateGridVisual()
     {
-        // HideAllGridPositions();
+        HideAllGridPositions();
         Unit selectedUnit = UnitActionSystem.Instance.GetSelectedUnit();
         if (selectedUnit == null) return;
         BaseAction selectedAction = UnitActionSystem.Instance.GetSelectedAction();

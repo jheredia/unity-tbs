@@ -4395,8 +4395,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.42415538, y: -0.000000015581909, z: 0.0000000072981767, w: 0.90558946}
-  m_LocalPosition: {x: 6, y: 12, z: -7}
+  m_LocalRotation: {x: 0.42415524, y: 1e-45, z: -1e-45, w: 0.9055895}
+  m_LocalPosition: {x: 6, y: 11.99999, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12639,8 +12639,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 928037105}
-  m_LocalRotation: {x: 0.42415538, y: -0.000000015581909, z: 0.0000000072981767, w: 0.90558946}
-  m_LocalPosition: {x: 6, y: 12, z: -7}
+  m_LocalRotation: {x: 0.42415524, y: 1e-45, z: -1e-45, w: 0.9055895}
+  m_LocalPosition: {x: 6, y: 11.99999, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19824,7 +19824,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a3cd22eceea5e8548b10cdb5d9b49a25, type: 2}
+  - {fileID: 2100000, guid: eb621190b6ac8481ba92b529ef9e7a5d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19863,7 +19863,7 @@ Transform:
   m_GameObject: {fileID: 1202222182}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 10, y: 1, z: 7.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -24175,7 +24175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 12, z: -10}
+  m_FollowOffset: {x: 0, y: 11.99999, z: -10}
   m_XDamping: 0
   m_YDamping: 0
   m_ZDamping: 0
@@ -26486,19 +26486,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridVisualTypeMaterialList:
   - gridVisualType: 0
-    material: {fileID: 2100000, guid: 6ec256ccd73f34c909094812ba44cd50, type: 2}
+    material: {fileID: 2100000, guid: 199005d3a979e4d368e978e198ac4b9d, type: 2}
   - gridVisualType: 2
-    material: {fileID: 2100000, guid: 56c06f8dff8fd4ef8aff781fb4c05969, type: 2}
+    material: {fileID: 2100000, guid: c6eca9b6b6913458ebe0c871d9c81070, type: 2}
   - gridVisualType: 1
-    material: {fileID: 2100000, guid: 2fe852ffdbd1d4efd86c7dfda9b96d24, type: 2}
+    material: {fileID: 2100000, guid: 82807c884337548c9a62efef2e4279ff, type: 2}
   - gridVisualType: 3
-    material: {fileID: 2100000, guid: 0f0b2d49b93f742cf94aedb8ddcd31e6, type: 2}
+    material: {fileID: 2100000, guid: 24595803d73534fd68ed71b3266166c6, type: 2}
   - gridVisualType: 4
-    material: {fileID: 2100000, guid: 0586c2f74732748cf80f143195f63b86, type: 2}
+    material: {fileID: 2100000, guid: e1fbd089e5cf04c40a013a4b75817cae, type: 2}
   - gridVisualType: 5
-    material: {fileID: 2100000, guid: 8280e91ad7808d0458e70250ec18f667, type: 2}
+    material: {fileID: 2100000, guid: 3b5e1334f8df84ac8b09070b6f49c651, type: 2}
   - gridVisualType: 6
-    material: {fileID: 2100000, guid: 3656676ff73f34aa1a19c128271ddc2b, type: 2}
+    material: {fileID: 2100000, guid: 2716db173ed8744fb918abb91ddf5409, type: 2}
   gridSystemVisualSinglePrefab: {fileID: 2628395732124575364, guid: d6ff672a0c2fd1b40a3fb85187e5d9c7,
     type: 3}
 --- !u!4 &1967029439
