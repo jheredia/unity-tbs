@@ -8,7 +8,9 @@ public class UnitAnimator : MonoBehaviour
 {
     const string IS_WALKING_PARAM = "IsWalking";
     const string SHOOT_TRIGGER = "Shoot";
-    const string MELEE_SWORD_TRIGGER = "Melee Sword";
+    const string MELEE_SWORD_TRIGGER = "MeleeSword";
+
+    const string TOSS_GRENADE_TRIGGER = "TossGrenade";
 
     [SerializeField] private Animator unitAnimator;
     [SerializeField] private Transform bulletProjectilePrefab;
@@ -32,6 +34,15 @@ public class UnitAnimator : MonoBehaviour
             meleeAction.OnSwordActionStarted += MeleeAction_OnSwordActionStarted;
             meleeAction.OnSwordActionCompleted += MeleeAction_OnSwordActionCompleted;
         }
+        if (TryGetComponent(out GrenadeAction grenadeAction))
+        {
+            grenadeAction.OnGrenadeLaunchStarted += GrenadeAction_OnGrenadeLaunchStarted;
+        }
+    }
+
+    private void GrenadeAction_OnGrenadeLaunchStarted(object sender, EventArgs e)
+    {
+        unitAnimator.SetTrigger(TOSS_GRENADE_TRIGGER);
     }
 
     // Start is called before the first frame update
