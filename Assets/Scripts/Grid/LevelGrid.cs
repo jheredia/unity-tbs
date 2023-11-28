@@ -21,7 +21,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] int height = 10;
     [SerializeField] float cellSize = 2f;
 
-    private GridSystem<GridObject> gridSystem;
+    private GridSystemHex<GridObject> gridSystem;
 
     private void Awake()
     {
@@ -33,11 +33,11 @@ public class LevelGrid : MonoBehaviour
         }
         Instance = this;
 
-        gridSystem = new GridSystem<GridObject>(
+        gridSystem = new GridSystemHex<GridObject>(
             width,
             height,
             cellSize,
-            (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
+            (GridSystemHex<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
         // gridSystem.CreateDebugObjects(gridDebugObjectPrefab);
     }
     // Start is called before the first frame update
