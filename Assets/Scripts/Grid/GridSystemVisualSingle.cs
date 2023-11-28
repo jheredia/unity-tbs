@@ -5,6 +5,7 @@ using UnityEngine;
 public class GridSystemVisualSingle : MonoBehaviour
 {
     [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private GameObject selectedGridVisual;
 
     public void Show(Material material)
     {
@@ -19,5 +20,10 @@ public class GridSystemVisualSingle : MonoBehaviour
     {
         if (meshRenderer != null)
             meshRenderer.enabled = false;
+    }
+
+    public void ShowSelectedGridVisual(bool show = true)
+    {
+        selectedGridVisual.SetActive(show);
     }
 }
