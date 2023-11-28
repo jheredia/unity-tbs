@@ -105,6 +105,14 @@ public class CameraManager : MonoBehaviour
                 ShowGameUI();
                 ShowActionCamera(false);
                 break;
+            case GrenadeAction:
+                ShowGameUI();
+                ShowActionCamera(false);
+                break;
+            default:
+                ShowGameUI();
+                ShowActionCamera(false);
+                break;
         }
     }
 }
