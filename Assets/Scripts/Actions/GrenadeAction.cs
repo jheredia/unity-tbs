@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GrenadeAction : BaseAction
@@ -16,7 +17,10 @@ public class GrenadeAction : BaseAction
 
     [SerializeField] private LayerMask obstaclesLayerMask;
     [SerializeField] private Transform grenadeProjectilePrefab;
+    [SerializeField] private Transform grenadeSpawnPoint;
     public static event EventHandler OnAnyGrenadeLaunched;
+    public event EventHandler OnGrenadeLaunchStarted;
+    public event EventHandler OnGrenadeLaunchCompleted;
     private float rotateSpeed = 10f;
     private GridPosition targetPosition;
 
@@ -86,9 +90,11 @@ public class GrenadeAction : BaseAction
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
         state = State.Aiming;
-        float aimingStateTime = .3f;
+        float aimingStateTime = 1.75f;
         stateTimer = aimingStateTime;
         targetPosition = gridPosition;
+
+        OnGrenadeLaunchStarted?.Invoke(this, EventArgs.Empty);
         ActionStart(onActionComplete);
     }
 
@@ -127,7 +133,8 @@ public class GrenadeAction : BaseAction
                 stateTimer = throwingStateTime;
                 break;
             case State.Throwing:
-                Transform grenadeProjectileTransform = Instantiate(grenadeProjectilePrefab, unit.GetWorldPosition(), Quaternion.identity);
+                Transform grenadeProjectileTransform = Instantiate(grenadeProjectilePrefab, grenadeSpawnPoint.position, Quaternion.identity);
+                OnGrenadeLaunchCompleted?.Invoke(this, EventArgs.Empty);
                 grenadeProjectileTransform.GetComponent<GrenadeProjectile>().Setup(targetPosition, OnGrenadeBehaviourComplete);
                 OnAnyGrenadeLaunched?.Invoke(this, EventArgs.Empty);
                 state = State.Cooloff;
