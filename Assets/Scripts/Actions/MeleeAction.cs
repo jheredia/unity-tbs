@@ -37,7 +37,7 @@ public class MeleeAction : BaseAction
         {
             case State.SwingingSwordBeforeHit:
                 Vector3 aimDirection = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
-                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
+                transform.forward = Vector3.Slerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
                 break;
             case State.SwingingSwordAfterHit:
                 break;
@@ -106,7 +106,7 @@ public class MeleeAction : BaseAction
         {
             for (int z = -actionRange; z <= actionRange; z++)
             {
-                GridPosition offsetGridPosition = new(x, z);
+                GridPosition offsetGridPosition = new(x, z, 0);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
                 if (!levelGrid.IsValidGridPosition(testGridPosition)) { continue; }// Not a valid grid position
                 if (!levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) { continue; }// No units in that position

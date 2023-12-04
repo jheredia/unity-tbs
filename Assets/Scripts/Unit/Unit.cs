@@ -23,7 +23,7 @@ public class Unit : MonoBehaviour
     {
         baseActionArray = GetComponents<BaseAction>();
         healthSystem = GetComponent<HealthSystem>();
-        isAwake = false;
+        isAwake = true;
         maxActionPoints = actionPoints;
     }
 

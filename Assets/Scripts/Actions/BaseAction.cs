@@ -30,6 +30,10 @@ public abstract class BaseAction : MonoBehaviour
     [SerializeField] private bool hasResourceCost = false;
     [SerializeField] private int keyCost;
 
+    [Header("Layers")]
+    [SerializeField] protected LayerMask obstaclesLayerMask;
+    [SerializeField] protected LayerMask floorLayerMask;
+
     protected virtual void Awake()
     {
         unit = GetComponent<Unit>();

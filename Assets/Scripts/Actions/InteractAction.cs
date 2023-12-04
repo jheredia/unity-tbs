@@ -27,7 +27,7 @@ public class InteractAction : BaseAction
         {
             for (int z = -actionRange; z <= actionRange; z++)
             {
-                GridPosition offsetGridPosition = new(x, z);
+                GridPosition offsetGridPosition = new(x, z, 0);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
                 if (!levelGrid.IsValidGridPosition(testGridPosition)) { continue; }// Not a valid grid position
                 IInteractable interactable = levelGrid.GetInteractableAtGridPosition(testGridPosition);

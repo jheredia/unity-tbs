@@ -24,6 +24,7 @@ public class UnitAnimator : MonoBehaviour
         {
             moveAction.OnStartMoving += MoveAction_OnStartMoving;
             moveAction.OnStopMoving += MoveAction_OnStopMoving;
+            moveAction.OnChangeFloorsStarted += MoveAction_OnChangeFloorsStarted;
         }
         if (TryGetComponent(out AttackAction attackAction))
         {
@@ -37,6 +38,18 @@ public class UnitAnimator : MonoBehaviour
         if (TryGetComponent(out GrenadeAction grenadeAction))
         {
             grenadeAction.OnGrenadeLaunchStarted += GrenadeAction_OnGrenadeLaunchStarted;
+        }
+    }
+
+    private void MoveAction_OnChangeFloorsStarted(object sender, MoveAction.OnChangeFloorsStartedEventArgs e)
+    {
+        if (e.targetGridPosition.floor > e.unitGridPosition.floor)
+        {
+            unitAnimator.SetTrigger("JumpUp");
+        }
+        else
+        {
+            unitAnimator.SetTrigger("JumpDown");
         }
     }
 
@@ -74,8 +87,8 @@ public class UnitAnimator : MonoBehaviour
         if (bulletProjectileTransform.TryGetComponent(out BulletProjectile bulletProjectile))
         {
             Vector3 targetUnitShootAtPosition = e.targetUnit.GetWorldPosition();
-
-            targetUnitShootAtPosition.y = shootPointTransform.position.y;
+            float unitShoulderHeight = 1.7f;
+            targetUnitShootAtPosition.y += unitShoulderHeight;
             bulletProjectile.Setup(targetUnitShootAtPosition);
         }
     }

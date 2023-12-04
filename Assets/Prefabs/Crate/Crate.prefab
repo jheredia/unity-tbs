@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5616901179582502914}
   - component: {fileID: 307852033101739326}
+  - component: {fileID: -2134973264138834667}
   - component: {fileID: 7999121530576641842}
   m_Layer: 8
   m_Name: Crate
@@ -55,6 +56,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.2, y: 1.2, z: 1.2}
   m_Center: {x: 0, y: 0.6, z: 0}
+--- !u!114 &-2134973264138834667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6081840131592876949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9610b928ec2f48b3ad08f32fc1a63f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7999121530576641842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,6 +82,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crateDestroyedPrefab: {fileID: 5732773684867799349, guid: a488b700b71332143b38100217f073f7,
     type: 3}
+  hitPoints: 0
 --- !u!1001 &4187641753853564419
 PrefabInstance:
   m_ObjectHideFlags: 0
