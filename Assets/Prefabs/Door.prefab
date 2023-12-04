@@ -459,6 +459,7 @@ GameObject:
   - component: {fileID: 5828616904467307384}
   - component: {fileID: 8000645234379877787}
   - component: {fileID: 4957400742909368889}
+  - component: {fileID: -2546955741034657848}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -502,6 +503,8 @@ MonoBehaviour:
   isLocked: 0
   innerLight: {fileID: 6719876218050053311}
   outerLight: {fileID: 2050389435240163907}
+  sector1: {fileID: 0}
+  sector2: {fileID: 0}
 --- !u!95 &4957400742909368889
 Animator:
   serializedVersion: 5
@@ -523,6 +526,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-2546955741034657848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7708651987826470979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9610b928ec2f48b3ad08f32fc1a63f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1388708208868768562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -531,6 +546,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5828616904467307384}
     m_Modifications:
+    - target: {fileID: -5757834596772376236, guid: 001fe4f599cfd41c1a358250f5de906a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 807367527733145430, guid: 001fe4f599cfd41c1a358250f5de906a,
         type: 3}
       propertyPath: m_RootOrder

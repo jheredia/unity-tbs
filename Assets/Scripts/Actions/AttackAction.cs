@@ -14,7 +14,6 @@ public class AttackAction : BaseAction
         Reloading
     }
 
-    [SerializeField] private LayerMask obstaclesLayerMask;
     private State state;
     private float stateTimer;
     private Unit targetUnit;
@@ -52,25 +51,34 @@ public class AttackAction : BaseAction
         {
             for (int z = -actionRange; z <= actionRange; z++)
             {
-                GridPosition offsetGridPosition = new GridPosition(x, z);
-                GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
-                if (!levelGrid.IsValidGridPosition(testGridPosition)) { continue; }// Not a valid grid position
-                int testDistance = Mathf.Abs(x) + Mathf.Abs(z); // Get the radius
-                if (testDistance > actionRange) { continue; }// Outside of attack range
-                // validGridPositionList.Add(testGridPosition);
-                if (!levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) { continue; }// No units in that position
-                Unit targetUnit = levelGrid.GetUnitAtGridPosition(testGridPosition);
-                if (targetUnit.IsEnemy() == unit.IsEnemy()) continue;
-                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
-                Vector3 shootDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
-                float unitShoulderHeight = 1.7f;
-                if (Physics.Raycast(
-                    unitWorldPosition + Vector3.up * unitShoulderHeight,
-                    shootDirection,
-                    Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
-                    obstaclesLayerMask
-                )) continue; // Blocked by an obstacle
-                validGridPositionList.Add(testGridPosition); // Add the grid position of the enemy
+                for (int floor = -actionRange; floor <= actionRange; floor++)
+                {
+                    GridPosition offsetGridPosition = new GridPosition(x, z, floor);
+                    GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
+                    if (!levelGrid.IsValidGridPosition(testGridPosition)) { continue; }// Not a valid grid position
+                    int testDistance = Mathf.Abs(x) + Mathf.Abs(z); // Get the radius
+                    if (testDistance > actionRange) { continue; }// Outside of attack range
+                                                                 // validGridPositionList.Add(testGridPosition);
+                    if (!levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) { continue; }// No units in that position
+                    Unit targetUnit = levelGrid.GetUnitAtGridPosition(testGridPosition);
+                    if (targetUnit.IsEnemy() == unit.IsEnemy()) continue;
+                    Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
+                    Vector3 shootDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
+                    float unitShoulderHeight = 1.7f;
+                    if (Physics.Raycast(
+                        unitWorldPosition + Vector3.up * unitShoulderHeight,
+                        shootDirection,
+                        Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
+                        obstaclesLayerMask
+                    )) continue; // Blocked by an obstacle
+                    if (Physics.Raycast(
+                        unitWorldPosition + Vector3.up * unitShoulderHeight,
+                        shootDirection,
+                        Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
+                        floorLayerMask
+                    )) continue;
+                    validGridPositionList.Add(testGridPosition); // Add the grid position of the enemy
+                }
             }
         }
         return validGridPositionList;
@@ -104,7 +112,8 @@ public class AttackAction : BaseAction
         {
             case State.Aiming:
                 Vector3 aimDirection = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
-                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
+                aimDirection.y = 0;
+                transform.forward = Vector3.Slerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
                 break;
             case State.Shooting:
                 if (canShootBullet)

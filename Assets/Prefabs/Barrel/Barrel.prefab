@@ -261,6 +261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8298385595383325397}
   - component: {fileID: 8199942821051901902}
+  - component: {fileID: -1977192778309071697}
   - component: {fileID: 1743241893795306288}
   - component: {fileID: 5574700912610686628}
   - component: {fileID: 6249223723704878441}
@@ -305,6 +306,18 @@ MonoBehaviour:
   grenadeLoot: 0
   barrelDestroyedPrefab: {fileID: 8857129381658330898, guid: b0d191c91ce0445e28ca07b8416b9cc9,
     type: 3}
+--- !u!114 &-1977192778309071697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8671277720585925382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9610b928ec2f48b3ad08f32fc1a63f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!64 &1743241893795306288
 MeshCollider:
   m_ObjectHideFlags: 0

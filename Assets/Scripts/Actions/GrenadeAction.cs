@@ -14,8 +14,6 @@ public class GrenadeAction : BaseAction
     }
     private State state;
     private float stateTimer;
-
-    [SerializeField] private LayerMask obstaclesLayerMask;
     [SerializeField] private Transform grenadeProjectilePrefab;
     [SerializeField] private Transform grenadeSpawnPoint;
     public static event EventHandler OnAnyGrenadeLaunched;
@@ -66,22 +64,38 @@ public class GrenadeAction : BaseAction
         {
             for (int z = -actionRange; z <= actionRange; z++)
             {
-                GridPosition offsetGridPosition = new GridPosition(x, z);
-                GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
-                if (!levelGrid.IsValidGridPosition(testGridPosition)) { continue; }// Not a valid grid position
-                int testDistance = Mathf.Abs(x) + Mathf.Abs(z); // Get the radius
-                if (testDistance > actionRange) { continue; }// Outside of attack rangei
-                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
-                Vector3 shootDirection = (LevelGrid.Instance.GetWorldPosition(testGridPosition) - unitWorldPosition).normalized;
-                float unitShoulderHeight = 1.7f;
-                if (Physics.Raycast(
-                    unitWorldPosition + Vector3.up * unitShoulderHeight,
-                    shootDirection,
-                    Vector3.Distance(unitWorldPosition, LevelGrid.Instance.GetWorldPosition(testGridPosition)),
-                    obstaclesLayerMask
-                )) continue; // Blocked by an obstacle
+                for (int floor = -actionRange; floor < actionRange; floor++)
+                {
+                    GridPosition offsetGridPosition = new GridPosition(x, z, floor);
+                    GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
+                    if (!levelGrid.IsValidGridPosition(testGridPosition)) { continue; }// Not a valid grid position
+                    int testDistance = Mathf.Abs(x) + Mathf.Abs(z); // Get the radius
+                    if (testDistance > actionRange) { continue; }// Outside of attack rangei
+                    Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
+                    Vector3 shootDirection = (LevelGrid.Instance.GetWorldPosition(testGridPosition) - unitWorldPosition).normalized;
+                    float unitShoulderHeight = 1.7f;
+                    if (Physics.Raycast(
+                        unitWorldPosition + Vector3.up * unitShoulderHeight,
+                        shootDirection,
+                        Vector3.Distance(unitWorldPosition, LevelGrid.Instance.GetWorldPosition(testGridPosition)),
+                        obstaclesLayerMask
+                    )) continue; // Blocked by an obstacle
+                    if (Physics.Raycast(
+                        unitWorldPosition + Vector3.up * unitShoulderHeight,
+                        shootDirection,
+                        Vector3.Distance(unitWorldPosition, LevelGrid.Instance.GetWorldPosition(testGridPosition)),
+                        floorLayerMask
+                    )) continue;
+                    float raycastOffsetDistance = 1f;
+                    if (!Physics.Raycast(
+                        LevelGrid.Instance.GetWorldPosition(testGridPosition) + Vector3.up * raycastOffsetDistance,
+                        Vector3.down,
+                        raycastOffsetDistance * 2,
+                        floorLayerMask)) continue;
 
-                validGridPositionList.Add(testGridPosition); // Add the grid position of the enemy
+                    validGridPositionList.Add(testGridPosition); // Add the grid position of the enemy
+                }
+
             }
         }
         return validGridPositionList;
@@ -109,7 +123,7 @@ public class GrenadeAction : BaseAction
         {
             case State.Aiming:
                 Vector3 aimDirection = (LevelGrid.Instance.GetWorldPosition(targetPosition) - unit.GetWorldPosition()).normalized;
-                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
+                transform.forward = Vector3.Slerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
                 break;
         }
         if (stateTimer <= 0f)

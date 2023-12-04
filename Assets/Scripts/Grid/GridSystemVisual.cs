@@ -27,8 +27,10 @@ public class GridSystemVisual : MonoBehaviour
     [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterialList;
 
     [SerializeField] private Transform gridSystemVisualSinglePrefab;
+    [SerializeField] private LayerMask obstaclesLayerMask;
+    [SerializeField] private LayerMask floorLayerMask;
 
-    private GridSystemVisualSingle[,] gridSystemVisualSingleArray;
+    private GridSystemVisualSingle[,,] gridSystemVisualSingleArray;
     private GridSystemVisualSingle lastSelectedGridSystemVisualSingle;
 
     private void Awake()
@@ -48,14 +50,17 @@ public class GridSystemVisual : MonoBehaviour
         LevelGrid levelGrid = LevelGrid.Instance;
         int levelGridWidth = levelGrid.GetWidth();
         int levelGridHeight = levelGrid.GetHeight();
-        gridSystemVisualSingleArray = new GridSystemVisualSingle[levelGridWidth, levelGridHeight];
+        gridSystemVisualSingleArray = new GridSystemVisualSingle[levelGridWidth, levelGridHeight, levelGrid.GetFloorAmount()];
         for (int x = 0; x < levelGridWidth; x++)
         {
             for (int z = 0; z < levelGridHeight; z++)
             {
-                GridPosition gridPosition = new GridPosition(x, z);
-                Transform gridSystemVisualSingleTransform = Instantiate(gridSystemVisualSinglePrefab, levelGrid.GetWorldPosition(gridPosition), Quaternion.identity);
-                gridSystemVisualSingleArray[x, z] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
+                for (int floor = 0; floor < levelGrid.GetFloorAmount(); floor++)
+                {
+                    GridPosition gridPosition = new GridPosition(x, z, floor);
+                    Transform gridSystemVisualSingleTransform = Instantiate(gridSystemVisualSinglePrefab, levelGrid.GetWorldPosition(gridPosition), Quaternion.identity);
+                    gridSystemVisualSingleArray[x, z, floor] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
+                }
             }
         }
         UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged;
@@ -70,10 +75,10 @@ public class GridSystemVisual : MonoBehaviour
     private void Update()
     {
         lastSelectedGridSystemVisualSingle?.ShowSelectedGridVisual(false);
-        Vector3 mouseWorldPosition = MouseWorld.GetPosition();
+        Vector3 mouseWorldPosition = MouseWorld.GetPositionOnlyHitVisible();
         GridPosition gridPosition = LevelGrid.Instance.GetGridPosition(mouseWorldPosition);
         if (LevelGrid.Instance.IsValidGridPosition(gridPosition))
-            lastSelectedGridSystemVisualSingle = gridSystemVisualSingleArray[gridPosition.x, gridPosition.z];
+            lastSelectedGridSystemVisualSingle = gridSystemVisualSingleArray[gridPosition.x, gridPosition.z, gridPosition.floor];
 
         lastSelectedGridSystemVisualSingle?.ShowSelectedGridVisual();
     }
@@ -90,7 +95,7 @@ public class GridSystemVisual : MonoBehaviour
     {
         foreach (GridPosition gridPosition in gridPositionList)
         {
-            GridSystemVisualSingle gridSystemVisualSingle = gridSystemVisualSingleArray[gridPosition.x, gridPosition.z];
+            GridSystemVisualSingle gridSystemVisualSingle = gridSystemVisualSingleArray[gridPosition.x, gridPosition.z, gridPosition.floor];
             gridSystemVisualSingle.Show(GetGridVisualTypeMaterial(gridVisualType));
         }
     }
@@ -100,15 +105,37 @@ public class GridSystemVisual : MonoBehaviour
 
 
         List<GridPosition> gridPositionList = new List<GridPosition>();
+        Vector3 originWorldPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
         for (int x = -range; x <= range; x++)
         {
             for (int z = -range; z <= range; z++)
             {
-                GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
-                int testDistance = Mathf.Abs(x) + Mathf.Abs(z); // Get the radius
-                if (testDistance > range) { continue; }// Outside of range
-                gridPositionList.Add(testGridPosition);
+                for (int floor = -range; floor < LevelGrid.Instance.GetFloorAmount(); floor++)
+                {
+                    GridPosition offsetGridPosition = new GridPosition(x, z, floor);
+                    GridPosition testGridPosition = gridPosition + offsetGridPosition;
+                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
+                    int testDistance = Mathf.Abs(x) + Mathf.Abs(z); // Get the radius
+                    if (testDistance > range) { continue; }// Outside of range
+                    if (!HasFloorOnGridPosition(testGridPosition)) continue;
+                    if (HasObstacleOnGridPosition(testGridPosition)) continue;
+                    float unitShoulderHeight = 1.7f;
+                    Vector3 testWorldPosition = LevelGrid.Instance.GetWorldPosition(testGridPosition);
+                    Vector3 actionDirection = (testWorldPosition - originWorldPosition).normalized;
+                    if (Physics.Raycast(
+                        originWorldPosition + Vector3.up * unitShoulderHeight,
+                        actionDirection,
+                        Vector3.Distance(originWorldPosition, testWorldPosition),
+                        obstaclesLayerMask
+                    )) continue;
+                    if (Physics.Raycast(
+                        originWorldPosition + Vector3.up * unitShoulderHeight,
+                        actionDirection,
+                        Vector3.Distance(originWorldPosition, testWorldPosition),
+                        floorLayerMask
+                    )) continue;
+                    gridPositionList.Add(testGridPosition);
+                }
             }
         }
         ShowGridPositionList(gridPositionList, gridVisualType);
@@ -124,13 +151,38 @@ public class GridSystemVisual : MonoBehaviour
         {
             for (int z = -range; z <= range; z++)
             {
-                GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
+                GridPosition offsetGridPosition = new GridPosition(x, z, 0);
+                GridPosition testGridPosition = gridPosition + offsetGridPosition;
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
+                if (!HasFloorOnGridPosition(testGridPosition)) continue;
+                if (HasObstacleOnGridPosition(testGridPosition)) continue;
                 gridPositionList.Add(testGridPosition);
             }
         }
         ShowGridPositionList(gridPositionList, gridVisualType);
 
+    }
+
+    private bool HasFloorOnGridPosition(GridPosition gridPosition)
+    {
+        float raycastOffsetDistance = 1f;
+        Vector3 worldPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+        return Physics.Raycast(
+                        worldPosition + Vector3.up * raycastOffsetDistance,
+                        Vector3.down,
+                        raycastOffsetDistance * 2,
+                        floorLayerMask);
+    }
+
+    private bool HasObstacleOnGridPosition(GridPosition gridPosition)
+    {
+        float raycastOffsetDistance = 1f;
+        Vector3 worldPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+        return Physics.Raycast(
+                        worldPosition + Vector3.down * raycastOffsetDistance,
+                        Vector3.up,
+                        raycastOffsetDistance * 2,
+                        obstaclesLayerMask);
     }
 
     private void UpdateGridVisual()
@@ -140,6 +192,7 @@ public class GridSystemVisual : MonoBehaviour
         if (selectedUnit == null) return;
         BaseAction selectedAction = UnitActionSystem.Instance.GetSelectedAction();
         GridVisualType gridVisualType = GridVisualType.White;
+        GridVisualType rangeGridVisualType = GridVisualType.White;
         switch (selectedAction)
         {
             default:
@@ -148,25 +201,11 @@ public class GridSystemVisual : MonoBehaviour
                 break;
             case AttackAction attackAction:
                 gridVisualType = GridVisualType.Red;
-                if (attackAction.GetShowRange())
-                {
-                    ShowGridPositionRange(
-                        selectedUnit.GetGridPosition(),
-                        attackAction.GetActionRange(),
-                        GridVisualType.SoftRed
-                    );
-                }
+                rangeGridVisualType = GridVisualType.SoftRed;
                 break;
             case MeleeAction meleeAction:
                 gridVisualType = GridVisualType.Red;
-                if (meleeAction.GetShowRange())
-                {
-                    ShowGridPositionRangeSquare(
-                        selectedUnit.GetGridPosition(),
-                        meleeAction.GetActionRange(),
-                        GridVisualType.SoftRed
-                    );
-                }
+                rangeGridVisualType = GridVisualType.SoftRed;
                 break;
             case GrenadeAction grenadeAction:
                 gridVisualType = GridVisualType.Yellow;
@@ -181,15 +220,16 @@ public class GridSystemVisual : MonoBehaviour
                 gridVisualType = GridVisualType.Green;
                 break;
         }
-        // ShowGridPositionRange(
-        //     selectedUnit.GetGridPosition(),
-        //     selectedAction.GetActionRange(),
-        //     selectedAction.GetActionGridVisualType(),
-        //     selectedAction.GetShowRange());
+        List<GridPosition> validGridPositionList = selectedAction.GetValidActionGridPositionList();
+        if (selectedAction.GetShowRange())
+        {
+            ShowGridPositionRange(selectedUnit.GetGridPosition(), selectedAction.GetActionRange(), rangeGridVisualType);
+        }
         ShowGridPositionList(
-            selectedAction.GetValidActionGridPositionList(),
+            validGridPositionList,
             gridVisualType);
     }
+
 
     private void UnitActionSystem_OnSelectedActionChanged(object sender, EventArgs e)
     {

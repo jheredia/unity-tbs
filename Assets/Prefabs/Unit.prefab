@@ -729,6 +729,7 @@ GameObject:
   - component: {fileID: 3144902361055536421}
   - component: {fileID: 3144902361055536420}
   - component: {fileID: 6620876567883648889}
+  - component: {fileID: 8305854529918042660}
   - component: {fileID: 8153697069655366984}
   - component: {fileID: 7231054622388251583}
   - component: {fileID: 6529012804902868592}
@@ -801,6 +802,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.69391894, y: 1.8232402, z: 0.98165417}
   m_Center: {x: -0.048057437, y: 0.8631727, z: 0.05383897}
+--- !u!114 &8305854529918042660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3144902361055536443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9610b928ec2f48b3ad08f32fc1a63f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dynamicFloorPosition: 1
 --- !u!114 &8153697069655366984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -822,6 +836,12 @@ MonoBehaviour:
   actionCharges: 1
   hasResourceCost: 0
   keyCost: 0
+  obstaclesLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  floorLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   movementSpeed: 4
   baseMovementSpeed: 4
 --- !u!114 &7231054622388251583
@@ -845,6 +865,12 @@ MonoBehaviour:
   actionCharges: 1
   hasResourceCost: 0
   keyCost: 0
+  obstaclesLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  floorLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &6529012804902868592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -869,6 +895,9 @@ MonoBehaviour:
   obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  floorLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &5208193298308369369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -893,6 +922,9 @@ MonoBehaviour:
   obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  floorLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   grenadeProjectilePrefab: {fileID: 3597587344006130414, guid: 75b295d581fcf496dbc916449fff24fc,
     type: 3}
   grenadeSpawnPoint: {fileID: 8566121170662306883}
@@ -963,6 +995,12 @@ MonoBehaviour:
   actionCharges: 1
   hasResourceCost: 0
   keyCost: 0
+  obstaclesLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  floorLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &-1832430624420559496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1012,6 +1050,12 @@ MonoBehaviour:
   actionCharges: 1
   hasResourceCost: 0
   keyCost: 0
+  obstaclesLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  floorLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &3854700103265592961
 GameObject:
   m_ObjectHideFlags: 0
@@ -2043,6 +2087,10 @@ PrefabInstance:
     - target: {fileID: 1316981293597076, guid: 2f3e27eecb190e44a9af50723c394274, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1316981293597076, guid: 2f3e27eecb190e44a9af50723c394274, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1326360802897878, guid: 2f3e27eecb190e44a9af50723c394274, type: 3}
       propertyPath: m_Layer

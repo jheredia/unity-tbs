@@ -19,11 +19,24 @@ public class CameraController : MonoBehaviour
     /// Consts related to zoom options
     /// </summary>
     private const float MIN_FOLLOW_Y_OFFSET = 2f;
-    private const float MAX_FOLLOW_Y_OFFST = 12f;
+    private const float MAX_FOLLOW_Y_OFFST = 25f;
     [SerializeField] private float zoomSpeed = 5f;
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
     private CinemachineTransposer cinemachineTransposer;
     private Vector3 targetFollowOffset;
+
+    public static CameraController Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.LogError($"Multiple instances of {GetType().Name} present {transform} - {Instance}");
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -78,5 +91,10 @@ public class CameraController : MonoBehaviour
     // {
     //     this.transform.position = newPosition;//Vector3.Lerp(this.transform.position, newPosition, movementSpeed * Time.deltaTime);
     // }
+
+    public float GetCameraHeight()
+    {
+        return targetFollowOffset.y;
+    }
 }
 
