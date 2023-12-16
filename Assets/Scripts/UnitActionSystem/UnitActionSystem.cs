@@ -57,7 +57,6 @@ public class UnitActionSystem : MonoBehaviour
         if (TryHandleUnitSelection()) return;
         if (!TurnSystem.Instance.IsPlayerTurn()) return;
         HandleSelectedAction();
-        HandleMovementSpeedInteractions();
     }
 
     private void HandleSelectedAction()
@@ -114,31 +113,6 @@ public class UnitActionSystem : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// Check whether the arrow up, arrow down or r key were pressed and change movement speed values accordingly
-    /// </summary>
-    private void HandleMovementSpeedInteractions()
-    {
-        InputManager inputManagerInstance = InputManager.Instance;
-
-        //Slow player (10%)
-        if (inputManagerInstance.GetKeyUp(KeyCode.DownArrow))
-        {
-            selectedUnit.GetAction<MoveAction>().SetMovementBuff(.9f);
-        }
-
-        // Speed up player (10%)
-        if (inputManagerInstance.GetKeyUp(KeyCode.UpArrow))
-        {
-            selectedUnit.GetAction<MoveAction>().SetMovementBuff(1.1f);
-        }
-
-        // Reset the speed of the player to base speed
-        if (inputManagerInstance.GetKeyUp(KeyCode.R))
-        {
-            selectedUnit.GetAction<MoveAction>().SetMovementSpeed(selectedUnit.GetAction<MoveAction>().GetBaseMovementSpeed());
-        }
-    }
     /// <summary>
     /// Change this Instance <c>Unit</c> and emit an event notifying of the change
     /// </summary>
