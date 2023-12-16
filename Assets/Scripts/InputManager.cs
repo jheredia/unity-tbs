@@ -28,27 +28,12 @@ public class InputManager : MonoBehaviour
         return Mouse.current.position.ReadValue();
     }
 
-    public bool GetKey(KeyCode key)
-    {
-        return Input.GetKey(key);
-    }
-
-    public bool GetKeyUp(KeyCode key)
-    {
-        return Input.GetKeyUp(key);
-    }
-
     public Vector2 GetCameraMoveVector() => playerInputActions.Player.CameraMovement.ReadValue<Vector2>();
 
 
     public bool IsLeftMouseButtonDownThisFrame() => playerInputActions.Player.LeftClick.WasPressedThisFrame();
 
     public bool IsRightMouseButtonDownThisFrame() => playerInputActions.Player.RightClick.WasPressedThisFrame();
-
-    public bool GetMouseButtonUp(int button)
-    {
-        return Input.GetMouseButtonUp(button);
-    }
 
     public float GetCameraRotationAmount() => playerInputActions.Player.CameraRotation.ReadValue<float>();
 
